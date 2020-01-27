@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-      //aqui modulos
+      // aqui modulos
     TypeOrmModule.forRoot(
         {
           name: 'default', // Nombre cadena de Conex.
