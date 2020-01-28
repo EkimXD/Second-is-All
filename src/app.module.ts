@@ -13,6 +13,7 @@ import { CabeceraModule } from './cabecera/cabecera.module';
 import { UsuarioEntity } from './usuario/usuario.entity';
 import { DetalleModule } from './detalle/detalle.module';
 import { DetalleEntity } from './detalle/detalle.entity';
+import {CabeceraEntity} from "./cabecera/cabecera.entity";
 
 @Module({
     imports: [
@@ -37,7 +38,7 @@ import { DetalleEntity } from './detalle/detalle.entity';
                     CategoriaEntity,
                     ProductoEntity,
                     UsuarioEntity,
-                    CategoriaEntity,
+                    CabeceraEntity,
                     DetalleEntity,
                 ],
                 synchronize: true, // Crear -> true , Conectar -> false
