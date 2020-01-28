@@ -11,6 +11,8 @@ import {ProductoEntity} from "./producto/producto.entity";
 import { UsuarioModule } from './usuario/usuario.module';
 import { CabeceraModule } from './cabecera/cabecera.module';
 import { UsuarioEntity } from './usuario/usuario.entity';
+import { DetalleModule } from './detalle/detalle.module';
+import { DetalleEntity } from './detalle/detalle.entity';
 
 @Module({
     imports: [
@@ -19,6 +21,7 @@ import { UsuarioEntity } from './usuario/usuario.entity';
         ProductoModule,
         UsuarioModule,
         CabeceraModule,
+        DetalleModule,
         TypeOrmModule.forRoot(
             {
                 name: 'default', // Nombre cadena de Conex.
@@ -35,6 +38,7 @@ import { UsuarioEntity } from './usuario/usuario.entity';
                     ProductoEntity,
                     UsuarioEntity,
                     CategoriaEntity,
+                    DetalleEntity,
                 ],
                 synchronize: true, // Crear -> true , Conectar -> false
             },
