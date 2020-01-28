@@ -1,5 +1,7 @@
 import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
+import {ProductoController} from "./producto.controller";
+import {ProductoService} from "./producto.service";
 import {ProductoEntity} from "./producto.entity";
 
 @Module({
@@ -12,15 +14,15 @@ import {ProductoEntity} from "./producto.entity";
                 'default', // Nombre de la cadena de conex.
             ),
     ],
-    // controllers: [
-    //     ProductoController,
-    // ],
-    // providers: [
-    //     ProductoService,
-    // ],
-    // exports: [
-    //     ProductoService,
-    // ],
+    controllers: [
+        ProductoController,
+    ],
+    providers: [
+        ProductoService,
+    ],
+    exports: [
+        ProductoService,
+    ],
 })
 export class ProductoModule {
 
