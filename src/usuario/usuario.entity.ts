@@ -42,4 +42,48 @@ export class UsuarioEntity {
     comment:'Correo en la tabla usuario',
   })
   correo?: string;
+
+  @Index({
+    unique: true,
+  })
+  @Column({
+    type:'varchar',
+    nullable: true,
+    name: 'telefono_usuario',
+    comment:'telefono en la tabla usuario',
+  })
+  telefono?: string;
+
+  @Index({
+    unique: false,
+  })
+  @Column({
+    type:'date',
+    nullable: true,
+    name: 'fecha_nacimiento_usuario',
+    comment:'fecha naciemiento en la tabla usuario',
+  })
+  fecha_nac?: string;
+
+  @Index({
+    unique: true,
+  })
+  @Column({
+    type:'varchar',
+    nullable: true,
+    name: 'nick_usuario',
+    comment:'nick en la tabla usuario',
+  })
+  nick?: string;
+
+  @Index({
+    unique: false,
+  })
+  @Column({
+    type:'varchar',
+    nullable: true,
+    name: 'contrasenia_usuario',
+    comment:'contraseña en la tabla usuario',
+  })
+  contraseña?: string;
 }
