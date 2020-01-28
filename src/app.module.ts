@@ -8,12 +8,14 @@ import {ProductoModule} from "./producto/producto.module";
 import {RolEntity} from "./rol/rol.entity";
 import {CategoriaEntity} from "./categoria/categoria.entity";
 import {ProductoEntity} from "./producto/producto.entity";
+import { UsuarioModule } from './usuario/usuario.module';
 
 @Module({
     imports: [
         RolModule,
         CategoriaModule,
         ProductoModule,
+        UsuarioModule,
         TypeOrmModule.forRoot(
             {
                 name: 'default', // Nombre cadena de Conex.
@@ -28,6 +30,7 @@ import {ProductoEntity} from "./producto/producto.entity";
                     RolEntity,
                     CategoriaEntity,
                     ProductoEntity,
+                    UsuarioModule,
                 ],
                 synchronize: true, // Crear -> true , Conectar -> false
             },
