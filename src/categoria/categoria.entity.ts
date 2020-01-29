@@ -1,4 +1,5 @@
-import {Column, Entity, Index, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Index, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
+import {ProductoEntity} from "../producto/producto.entity";
 
 
 @Entity('categoria')
@@ -12,6 +13,9 @@ export class CategoriaEntity {
     })
     id:number;
 
+    @Index({
+        unique:true,
+    })
     @Column({
         nullable:false,
         type:'varchar',
@@ -28,4 +32,9 @@ export class CategoriaEntity {
     })
     descripcion:string;
 
+    @ManyToMany(
+        type=>ProductoEntity,
+        producto=>producto.categoria
+    )
+    producto:ProductoEntity;
 }

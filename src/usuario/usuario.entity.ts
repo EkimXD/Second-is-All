@@ -86,7 +86,7 @@ export class UsuarioEntity {
         name: 'contrasenia_usuario',
         comment: 'contraseña en la tabla usuario',
     })
-    contraseña?: string;
+    contrasena?: string;
 
   @ManyToMany(type => RolEntity)
   roles: RolEntity[];
