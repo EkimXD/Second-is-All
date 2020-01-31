@@ -1,4 +1,4 @@
-import {Column, Entity, Index, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {RolEntity} from "../rol/rol.entity";
 
 @Entity('usuario_web')
@@ -88,6 +88,10 @@ export class UsuarioEntity {
     })
     contrasena?: string;
 
-  @ManyToMany(type => RolEntity)
-  roles: RolEntity[];
+  @ManyToMany(
+      type => RolEntity,
+      rol=>rol.usuario
+  )
+  @JoinTable()
+  rol: RolEntity[];
 }

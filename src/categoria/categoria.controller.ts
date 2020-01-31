@@ -10,11 +10,12 @@ import {DeleteResult} from "typeorm";
 export class CategoriaController {
 
     constructor(
-        private readonly _categoriaService:CategoriaService
-    ) {}
+        private readonly _categoriaService: CategoriaService
+    ) {
+    }
 
     @Get('callme')
-    sayName(){
+    sayName() {
         return 'categoria'
     }
 
@@ -22,20 +23,19 @@ export class CategoriaController {
     async crearUnaCategoria(
         @Body() categoria: CategoriaEntity,
         @Session() session,
-
-    ) :Promise<CategoriaEntity>{
+    ): Promise<CategoriaEntity> {
         if (categoria) {//todo agregar restriccion en creacion de categorias
             let categoriadto = new CategoriaCreateDto();
             categoriadto.nombre = categoria.nombre;
             const validacion = await validate(categoriadto);
-            if (validacion.length===0){
-                try{
+            if (validacion.length === 0) {
+                try {
                     return this._categoriaService.crearUno(categoria);
-                //todo modificar esto cuando se haga el front
-                }catch (error) {
+                    //todo modificar esto cuando se haga el front
+                } catch (error) {
                     console.log(error);
                 }
-            }else{
+            } else {
                 throw new BadRequestException('Error validando');
                 //todo modificar esto cuando se haga el front
             }
@@ -47,13 +47,17 @@ export class CategoriaController {
 
     @Delete(':id')
     eliminarCategoria(
-        @Param('id') idCategoria:string,
-    ):Promise<DeleteResult>{
-        try {
-            console.log(idCategoria);
-            return this._categoriaService.borrarUno(+idCategoria);
-        }catch (e) {
-            console.log(e);
+        @Param('id') idCategoria: string,
+    ): Promise<DeleteResult> {
+
+        if(idCategoria)//todo agregar restriccion en creacion de categorias
+        {
+            try {
+                console.log(idCategoria);
+                return this._categoriaService.borrarUno(+idCategoria);
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 }

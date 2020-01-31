@@ -1,4 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
+import {type} from "os";
+import {UsuarioEntity} from "../usuario/usuario.entity";
 
 
 @Entity('rol')
@@ -26,4 +28,11 @@ export class RolEntity {
         comment: 'Descripcion de la rol'
     })
     descripcion:string;
+
+    @ManyToMany(
+        type=>UsuarioEntity,
+        usuario=>usuario.rol
+    )
+    usuario:UsuarioEntity[];
+
 }
