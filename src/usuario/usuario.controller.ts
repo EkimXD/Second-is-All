@@ -6,6 +6,7 @@ import {validate} from "class-validator";
 import {RolService} from "../rol/rol.service";
 import {DeleteResult} from "typeorm";
 import {UsuarioLoginDto} from "./usuario.login-dto";
+import {RolEntity} from "../rol/rol.entity";
 
 
 @Controller('usuario')
@@ -47,7 +48,6 @@ export class UsuarioController {
         @Session()session
     ) {
         const validacion = await validate(this.usuarioDTOtoLG(usuario, contrasena));
-        console.log(validacion);
         if (validacion.length === 0) {
             const where = [
                 {nick: usuario},
@@ -55,17 +55,20 @@ export class UsuarioController {
             ];
             await this._usuarioService.buscar(where)
                 .then(
-                    resultado => {
+                    async resultado => {
                         try {
                             const result:UsuarioEntity=resultado[0];
-                            console.log(result);
                             if (result.contrasena===contrasena){
+                                let arregloRoles:string[];
                                 session.usuario={
+                                    id_usuario:result.id_usuario,
                                     usuario:result.nick,
-                                    //todo aun falta completar
-                                }
+                                    roles:''
+                                };
+                                    console.log(result);
                             }
                         }catch (e) {
+                            console.log(e);
                             throw new BadRequestException('Imporsible crear una nueva sesion, su usuario no existe o exiten duplicados');
                         }
                     }

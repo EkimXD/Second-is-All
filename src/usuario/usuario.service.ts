@@ -15,6 +15,11 @@ export class UsuarioService {
             .findOne(id);
     }
 
+    encontrarRoles(id: number): Promise<UsuarioEntity | undefined> {
+        return this._repositorioRol
+            .findOne(id);
+    }
+
     crearUno(usuario: UsuarioEntity) {
         return this._repositorioRol
             .save(usuario);
@@ -39,7 +44,7 @@ export class UsuarioService {
         skip: number = 0,
         take: number = 10,
         order: any = {
-            id: 'DESC',
+            id_usuario: 'DESC',
             nombre: 'ASC'
         }
     ): Promise<UsuarioEntity[]> {
