@@ -8,7 +8,7 @@ import {RolEntity} from "./rol.entity";
 export class RolService {
     constructor(
         @InjectRepository(RolEntity)
-        private _repositorioRol: Repository<RolEntity>
+        public _repositorioRol: Repository<RolEntity>
     ) {}
 
     encontrarUno(id: number): Promise<RolEntity | undefined> {

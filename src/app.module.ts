@@ -32,7 +32,7 @@ import {CabeceraEntity} from "./cabecera/cabecera.entity";
                 username: 'root',
                 password: '1234',
                 database: 'secondisall',
-                dropSchema: true,
+                dropSchema: false,
                 entities: [
                     RolEntity,
                     CategoriaEntity,
