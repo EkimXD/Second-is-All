@@ -1,4 +1,16 @@
-import {BadRequestException, Body, Controller, Delete, Get, Module, Param, Post, Session} from "@nestjs/common";
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Module,
+    Param,
+    Post,
+    Req,
+    Res,
+    Session
+} from "@nestjs/common";
 import {UsuarioService} from "./usuario.service";
 import {UsuarioEntity} from "./usuario.entity";
 import {UsuarioCreateDto} from "./usuario.create-dto";
@@ -19,18 +31,6 @@ export class UsuarioController {
 
     @Get('callme')
     async sayName() {
-        this._rolService.buscar()
-            .then(
-                resultado => {
-                    console.log(resultado);
-
-                }
-            )
-            .catch(
-                error => {
-                    console.log(error);
-                }
-            );
         return 'usuario';
     }
 
@@ -39,6 +39,16 @@ export class UsuarioController {
         @Session()session,
     ) {
         return session;
+    }
+
+    @Get('logout')
+    sessionLogout(
+        @Session()session,
+        @Req()req
+    ) {
+        session.usuario = undefined;
+        req.session.destroy();
+        return 'Deslogueado';
     }
 
     @Get('login')
@@ -53,23 +63,28 @@ export class UsuarioController {
                 {nick: usuario},
                 {correo: usuario}
             ];
-            await this._usuarioService.buscar(where)
+            await this._usuarioService.buscar(where,['rol'])
                 .then(
                     async resultado => {
                         try {
                             const result:UsuarioEntity=resultado[0];
                             if (result.contrasena===contrasena){
-                                let arregloRoles:string[];
+                                let arregloRoles:Array<string>=new Array<string>();
+                                result.rol.forEach((rol,index)=>{
+                                   arregloRoles.push(rol.nombre);
+                                });
                                 session.usuario={
                                     id_usuario:result.id_usuario,
                                     usuario:result.nick,
-                                    roles:''
+                                    roles:arregloRoles
                                 };
-                                    console.log(result);
+
+                            }else {
+                                console.log('Contrasena incorrecta');
                             }
                         }catch (e) {
                             console.log(e);
-                            throw new BadRequestException('Imporsible crear una nueva sesion, su usuario no existe o exiten duplicados');
+                            throw new BadRequestException('Imposible crear una nueva sesion, su usuario no existe o exiten duplicados');
                         }
                     }
                 )

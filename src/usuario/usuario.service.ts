@@ -41,6 +41,7 @@ export class UsuarioService {
 
     buscar(
         where: any = {},
+        relations:any=[],
         skip: number = 0,
         take: number = 10,
         order: any = {
@@ -54,6 +55,7 @@ export class UsuarioService {
                 skip: skip,
                 take: take,
                 order: order,
+                relations:relations
             });
     }
 }
