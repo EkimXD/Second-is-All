@@ -1,0 +1,135 @@
+<%- include('../../compartido/cabecera') %>
+
+
+<div class="container">
+
+
+
+    <form action=""
+          method="POST"
+    >
+        <div class="form-group">
+            <label for="nombreID">Nombre</label>
+            <input id="nombreID"
+                   type="text"
+                   name="nombre"
+                   placeholder="Ej: Fabricio Alvear"
+                   title="Ingresar nombre de usuario"
+                   class="form-control">
+            <small id="nombreIDHelp"
+                   class="form-text text-muted">
+                Ingresa un nombre mayor a 3 caracteres y menor a 10
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="apellidoID">Apellido</label>
+            <input id="apellidoID"
+                   type="text"
+                   name="apellido"
+                   placeholder="Ej: Alvear"
+                   title="Ingresar apellido de usuario"
+                   class="form-control">
+            <small id="apellidoIDHelp"
+                   class="form-text text-muted">
+                Ingresa un apellido mayor a 3 caracteres y menor a 10
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="feachaID">Fecha de Nacimiento</label>
+            <input id="fechaID"
+                   type="text"
+                   name="fecha"
+                   placeholder="Ej: dd/mm/aaaa"
+                   title="Ingresar fecha de nacimiento"
+                   class="form-control">
+            <small id="fechaIDHelp"
+                   class="form-text text-muted">
+                Ingresa fecha de nacimiento con el formato dd/mm/aaaa
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="correoID">Correo Electrónico</label>
+            <input id="correoID"
+                   type="text"
+                   name="correo"
+                   placeholder="Ej: ejemplo@mail.com"
+                   title="Ingresar correo valido"
+                   class="form-control">
+            <small id="correoIDHelp"
+                   class="form-text text-muted">
+                Ingresa un correo válido
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="telefonoID">Teléfono</label>
+            <input id="telefonoID"
+                   type="text"
+                   name="telefono"
+                   placeholder="Ej: 09xxxxxxxx"
+                   title="Ingresar telefono del usuario"
+                   class="form-control">
+            <small id="telefonoIDHelp"
+                   class="form-text text-muted">
+                Ingresa un telefono válido
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="usuarioID">Usuario</label>
+            <input id="usuarioID"
+                   type="text"
+                   name="usuario"
+                   placeholder="Ej: elvio"
+                   title="Ingresar un usuario"
+                   class="form-control">
+            <small id="usuarioIDHelp"
+                   class="form-text text-muted">
+                Ingresa un usuario
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="contraseniaID">Contraseña</label>
+            <input id="contraseniaID"
+                   type="text"
+                   name="contrasenia"
+                   title="Ingresar una contraseña de usuario"
+                   class="form-control">
+            <small id="contraseniaIDHelp"
+                   class="form-text text-muted">
+                Ingresa una contraseña de minimo 8 caracteres
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="verificacionContraseniaID">Verificación Contraseña</label>
+            <input id="verificacionContraseniaID"
+                   type="text"
+                   name="verificacionContrasenia"
+                   title="Vuelva a ingresar la contraseña de usuario"
+                   class="form-control">
+            <small id="verficacionContraseniaIDHelp"
+                   class="form-text text-muted">
+                Ingresa una contraseña de minimo 8 caracteres
+            </small>
+        </div>
+
+
+        <button type="submit"
+                class="btn btn-success">
+            Crear Usuario
+        </button>
+        <button type="reset"
+                class="btn btn-secondary">
+            Limpiar formulario
+        </button>
+
+    </form>
+
+
+</div>
+<%- include('../../compartido/pie-de-pagina') %>

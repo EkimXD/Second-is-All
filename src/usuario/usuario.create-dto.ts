@@ -1,17 +1,22 @@
 import {Column, Index, PrimaryGeneratedColumn} from "typeorm";
-import {IsDateString, IsEmail, IsNotEmpty, MaxLength, MinLength} from "class-validator";
+import { IsDateString, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class UsuarioCreateDto {
 
     @IsNotEmpty()
-    @MaxLength(100)
+    @IsString()
+    @MaxLength(10)
+    @MinLength(3)
     nombre: string;
 
     @IsNotEmpty()
-    @MaxLength(100)
+    @IsString()
+    @MaxLength(10)
+    @MinLength(3)
     apellido: string;
 
     @IsNotEmpty()
+    @IsString()
     @IsEmail()
     correo: string;
 

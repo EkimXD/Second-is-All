@@ -6,11 +6,11 @@ import {
     Get,
     Module,
     Param,
-    Post,
+    Post, Query,
     Req,
     Res,
-    Session
-} from "@nestjs/common";
+    Session,
+} from '@nestjs/common';
 import {UsuarioService} from "./usuario.service";
 import {UsuarioEntity} from "./usuario.entity";
 import {UsuarioCreateDto} from "./usuario.create-dto";
@@ -27,6 +27,22 @@ export class UsuarioController {
         private readonly _usuarioService: UsuarioService,
         private readonly _rolService: RolService,
     ) {
+    }
+
+    @Get('rutas/crear-usuario')
+    async rutaCrearUsuarios(
+
+      @Query('error') error: string,
+      @Res() res,
+    ){
+        res.render(
+          'usuario/rutas/crear-usuario',
+          {
+              datos: {
+                  error,
+              },
+          }
+        );
     }
 
     @Get('callme')
@@ -111,8 +127,17 @@ export class UsuarioController {
 
     @Post()
     async crearUsuario(
-        @Body() usuario: UsuarioEntity
+        @Body() usuario: UsuarioEntity,
+        @Res() res,
     ) {
+        const usuarioCreateDto = new UsuarioCreateDto();
+        usuarioCreateDto.nombre = usuario.nombre;
+        usuarioCreateDto.apellido = usuario.apellido;
+        usuarioCreateDto.correo = usuario.correo;
+        usuarioCreateDto.fecha_nac = usuario.fecha_nac;
+        usuarioCreateDto.contrasena = usuario.contrasena;
+        usuarioCreateDto.nick = usuario.nick;
+        usuarioCreateDto.telefono = usuario.telefono;
 
         const validacion = await validate(this.usuarioDTOtoGE(usuario));
         if (validacion.length === 0) {
