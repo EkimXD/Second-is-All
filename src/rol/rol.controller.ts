@@ -1,6 +1,9 @@
-import {Controller, Get, Query} from "@nestjs/common";
+import {BadRequestException, Body, Controller, Delete, Get, Param, Post, Query} from "@nestjs/common";
 import {RolEntity} from "./rol.entity";
 import {RolService} from "./rol.service";
+import {RolCreateDto} from "./rol.create-dto";
+import {validate} from "class-validator";
+import {DeleteResult} from "typeorm";
 
 
 @Controller('rol')
@@ -51,4 +54,28 @@ export class RolController {
                 order,
             );
     }
+
+    @Post()
+    async agregarRol(
+        @Body() rol:RolEntity,
+    ):Promise<RolEntity>{
+        let rolDto=new RolCreateDto();
+        rolDto.rol=rol.nombre;
+        rolDto.descripcion=rol.descripcion;
+        const validadion=await validate(rolDto);
+        if(validadion.length===0){
+            return this._rolService.crearUno(rol);
+        }else{
+            throw new BadRequestException('Error en validacion');
+        }
+    }
+
+    @Delete(':id')
+    borrarRol(
+        @Param('id')id:string,
+    ):Promise<DeleteResult>{
+        return this._rolService.borrarUno(+id);
+    }
+
+
 }

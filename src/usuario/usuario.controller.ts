@@ -19,6 +19,7 @@ import {RolService} from "../rol/rol.service";
 import {DeleteResult} from "typeorm";
 import {UsuarioLoginDto} from "./usuario.login-dto";
 import {RolEntity} from "../rol/rol.entity";
+import {errorComparator} from "tslint/lib/verify/lintError";
 
 
 @Controller('usuario')
@@ -86,7 +87,7 @@ export class UsuarioController {
                             const result:UsuarioEntity=resultado[0];
                             if (result.contrasena===contrasena){
                                 let arregloRoles:Array<string>=new Array<string>();
-                                result.rol.forEach((rol,index)=>{
+                                result.rol.forEach((rol)=>{
                                    arregloRoles.push(rol.nombre);
                                 });
                                 session.usuario={
@@ -130,15 +131,6 @@ export class UsuarioController {
         @Body() usuario: UsuarioEntity,
         @Res() res,
     ) {
-        const usuarioCreateDto = new UsuarioCreateDto();
-        usuarioCreateDto.nombre = usuario.nombre;
-        usuarioCreateDto.apellido = usuario.apellido;
-        usuarioCreateDto.correo = usuario.correo;
-        usuarioCreateDto.fecha_nac = usuario.fecha_nac;
-        usuarioCreateDto.contrasena = usuario.contrasena;
-        usuarioCreateDto.nick = usuario.nick;
-        usuarioCreateDto.telefono = usuario.telefono;
-
         const validacion = await validate(this.usuarioDTOtoGE(usuario));
         if (validacion.length === 0) {
             const where = [{
@@ -164,6 +156,36 @@ export class UsuarioController {
                 );
         } else {
             throw new BadRequestException(`Error validando \n${validacion}`)
+        }
+
+    }
+
+    @Post(':id')
+    async editarUsuario(
+        @Body()usuario:UsuarioEntity,
+        @Param('id')id:string
+    ){
+        try {
+            usuario.id_usuario= +id;
+            let validacion=await validate(this.usuarioDTOtoGE(usuario));
+            if (validacion.length==0){
+                this._usuarioService.buscar({id_usuario:+id},['rol'])
+                    .then(
+                        resultado=>{
+                            usuario.rol=resultado[0].rol;
+                        }
+                    )
+                    .catch(
+                        error=>{
+                            console.log(error)
+                        }
+                    )
+            }else{
+                //todo algo :v
+            }
+
+        }catch (e) {
+            console.log(e);
         }
 
     }
