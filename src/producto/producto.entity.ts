@@ -61,6 +61,14 @@ export class ProductoEntity {
     })
     cantidad:number;
 
+    @Column({
+        type:'varchar',
+        nullable:true,
+        name:'imagen_producto',
+        comment:'Imagen del producto'
+    })
+    imagen:string;
+
     @ManyToMany(
         type => CategoriaEntity,
         categoria=>categoria.producto
