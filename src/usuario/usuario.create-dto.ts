@@ -1,4 +1,4 @@
-import { IsDateString, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsDate, IsDateString, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class UsuarioCreateDto {
 
@@ -22,7 +22,6 @@ export class UsuarioCreateDto {
 
     telefono?: string;
 
-    @IsDateString()
     fecha_nac?: string;
 
     @IsNotEmpty()

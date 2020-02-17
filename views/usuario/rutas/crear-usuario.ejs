@@ -5,7 +5,7 @@
 
 
 
-    <form action=""
+    <form action="/usuario"
           method="POST"
     >
         <div class="form-group">
@@ -13,7 +13,7 @@
             <input id="nombreID"
                    type="text"
                    name="nombre"
-                   placeholder="Ej: Fabricio Alvear"
+                   placeholder="Ej: Fabricio"
                    title="Ingresar nombre de usuario"
                    class="form-control">
             <small id="nombreIDHelp"
@@ -82,7 +82,7 @@
             <label for="usuarioID">Usuario</label>
             <input id="usuarioID"
                    type="text"
-                   name="usuario"
+                   name="nick"
                    placeholder="Ej: elvio"
                    title="Ingresar un usuario"
                    class="form-control">
@@ -96,7 +96,7 @@
             <label for="contraseniaID">Contraseña</label>
             <input id="contraseniaID"
                    type="text"
-                   name="contrasenia"
+                   name="contrasena"
                    title="Ingresar una contraseña de usuario"
                    class="form-control">
             <small id="contraseniaIDHelp"
@@ -118,11 +118,11 @@
             </small>
         </div>
 
-
         <button type="submit"
                 class="btn btn-success">
             Crear Usuario
         </button>
+
         <button type="reset"
                 class="btn btn-secondary">
             Limpiar formulario

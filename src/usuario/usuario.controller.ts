@@ -144,8 +144,14 @@ export class UsuarioController {
                         if (resultado.length === 2) {
                             usuario.rol = [resultado[0], resultado[1]];
                             this._usuarioService.crearUno(usuario);
+                            res.redirect(
+                              '/usuario/rutas/crear-usuario?mensaje=El usuario fue creado exitosamente',
+                            );
                         } else {
-                            throw new BadRequestException('No se puede crear usuario, no existen roles aplicables');
+                            res.redirect(
+                              '/usuario/rutas/crear-usuario?error=Error del servidor roles',
+                            )
+                            //throw new BadRequestException('No se puede crear usuario, no existen roles aplicables');
                         }
                     }
                 )
@@ -155,7 +161,10 @@ export class UsuarioController {
                     }
                 );
         } else {
-            throw new BadRequestException(`Error validando \n${validacion}`)
+            res.redirect(
+              '/usuario/rutas/crear-usuario?error=Error validando',
+            )
+            //throw new BadRequestException(`Error validando \n${validacion}`)
         }
 
     }
