@@ -131,6 +131,7 @@ export class UsuarioController {
         @Body() usuario: UsuarioEntity,
         @Res() res,
     ) {
+      console.log(usuario)
         const validacion = await validate(this.usuarioDTOtoGE(usuario));
         if (validacion.length === 0) {
             const where = [{
@@ -138,6 +139,7 @@ export class UsuarioController {
             }, {
                 id: 2
             }];
+
             await this._rolService.buscar(where)
                 .then(
                     resultado => {
@@ -147,7 +149,7 @@ export class UsuarioController {
                             // res.redirect(
                             //   '/login/login?mensaje=El usuario fue creado exitosamente',
                             // );
-                            res.redirect('/inicio/login')
+                            res.redirect('/inicio/login?mensaje=Usuario creado exitosamente')
                         } else {
                             res.redirect(
                               '/usuario/rutas/crear-usuario?error=Error del servidor roles',

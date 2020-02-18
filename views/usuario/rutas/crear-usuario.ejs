@@ -39,11 +39,12 @@
         <div class="form-group">
             <label for="feachaID">Fecha de Nacimiento</label>
             <input id="fechaID"
-                   type="text"
+                   type="date"
                    name="fecha_nac"
                    placeholder="Ej: dd/mm/aaaa"
                    title="Ingresar fecha de nacimiento"
-                   class="form-control">
+                   class="form-control"
+                   onkeydown="return false">
             <small id="fechaIDHelp"
                    class="form-text text-muted">
                 Ingresa fecha de nacimiento con el formato dd/mm/aaaa
