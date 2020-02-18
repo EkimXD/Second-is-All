@@ -45,7 +45,7 @@ export class UsuarioEntity {
     correo?: string;
 
     @Index({
-        unique: true,
+        unique: false,
     })
     @Column({
         type: 'varchar',

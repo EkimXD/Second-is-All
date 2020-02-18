@@ -28,8 +28,8 @@ import {CabeceraEntity} from "./cabecera/cabecera.entity";
                 name: 'default', // Nombre cadena de Conex.
                 type: 'mysql',
                 host: 'localhost',
-                port: 3306,
-                username: 'root',
+                port: 32769,
+                username: 'alv',
                 password: '1234',
                 database: 'secondisall',
                 dropSchema: false,

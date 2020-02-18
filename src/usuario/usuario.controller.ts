@@ -144,9 +144,10 @@ export class UsuarioController {
                         if (resultado.length === 2) {
                             usuario.rol = [resultado[0], resultado[1]];
                             this._usuarioService.crearUno(usuario);
-                            res.redirect(
-                              '/usuario/rutas/crear-usuario?mensaje=El usuario fue creado exitosamente',
-                            );
+                            // res.redirect(
+                            //   '/login/login?mensaje=El usuario fue creado exitosamente',
+                            // );
+                            res.redirect('/inicio/login')
                         } else {
                             res.redirect(
                               '/usuario/rutas/crear-usuario?error=Error del servidor roles',
