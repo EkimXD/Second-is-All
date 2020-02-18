@@ -68,11 +68,12 @@ export class UsuarioController {
         return 'Deslogueado';
     }
 
-    @Get('login')
+    @Post('login')
     async login(
         @Body('usuario') usuario: string,
         @Body('contrasena') contrasena: string,
-        @Session()session
+        @Session()session,
+        @Res() res,
     ) {
         const validacion = await validate(this.usuarioDTOtoLG(usuario, contrasena));
         if (validacion.length === 0) {
@@ -96,8 +97,11 @@ export class UsuarioController {
                                     roles:arregloRoles
                                 };
 
+                                res.redirect('/usuario/rutas/crear-usuario?mensaje=Usuario logeado',)
+
                             }else {
                                 console.log('Contrasena incorrecta');
+                                res.redirect('/inicio/login?error=Contrasena incorrecta',)
                             }
                         }catch (e) {
                             console.log(e);
