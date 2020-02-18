@@ -30,6 +30,20 @@ export class UsuarioController {
     ) {
     }
 
+    @Get('login')
+    rutaLogin(
+      @Res() res,
+    ){
+        res.render('login/login')
+    }
+
+    @Get('principal')
+    rutaPrincipal(
+      @Res() res,
+    ){
+        res.render('componentes/principal')
+    }
+
     @Get('rutas/crear-usuario')
     async rutaCrearUsuarios(
 
@@ -97,7 +111,7 @@ export class UsuarioController {
                                     roles:arregloRoles
                                 };
 
-                                res.redirect('/usuario/rutas/crear-usuario?mensaje=Usuario logeado',)
+                                res.redirect('/componentes/principal?mensaje=Usuario logeado',)
 
                             }else {
                                 console.log('Contrasena incorrecta');
