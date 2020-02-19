@@ -9,11 +9,11 @@ import {RolEntity} from "./rol/rol.entity";
 import {CategoriaEntity} from "./categoria/categoria.entity";
 import {ProductoEntity} from "./producto/producto.entity";
 import { UsuarioModule } from './usuario/usuario.module';
-import { CabeceraModule } from './cabecera/cabecera.module';
 import { UsuarioEntity } from './usuario/usuario.entity';
-import { DetalleModule } from './detalle/detalle.module';
-import { DetalleEntity } from './detalle/detalle.entity';
-import {CabeceraEntity} from "./cabecera/cabecera.entity";
+import {CabCarritoEntity} from "./cab_carrito/cab-carrito.entity";
+import {DetCarritoEntity} from "./det_carrito/det-carrito.entity";
+import {CabCarritoModule} from "./cab_carrito/cab-carrito.module";
+import {DetCarritoModule} from "./det_carrito/det-carrito.module";
 
 @Module({
     imports: [
@@ -21,15 +21,15 @@ import {CabeceraEntity} from "./cabecera/cabecera.entity";
         CategoriaModule,
         ProductoModule,
         UsuarioModule,
-        CabeceraModule,
-        DetalleModule,
+        CabCarritoModule,
+        DetCarritoModule,
         TypeOrmModule.forRoot(
             {
                 name: 'default', // Nombre cadena de Conex.
                 type: 'mysql',
                 host: 'localhost',
-                port: 32769,
-                username: 'alv',
+                port: 3306,
+                username: 'root',
                 password: '1234',
                 database: 'secondisall',
                 dropSchema: false,
@@ -38,8 +38,8 @@ import {CabeceraEntity} from "./cabecera/cabecera.entity";
                     CategoriaEntity,
                     ProductoEntity,
                     UsuarioEntity,
-                    CabeceraEntity,
-                    DetalleEntity,
+                    CabCarritoEntity,
+                    DetCarritoEntity,
                 ],
                 synchronize: true, // Crear -> true , Conectar -> false
             },

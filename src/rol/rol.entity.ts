@@ -25,7 +25,7 @@ export class RolEntity {
         nullable:true,
         type:'varchar',
         name: 'descripcion_rol',
-        comment: 'Descripcion de la rol'
+        comment: 'Descripcion de la tabla rol'
     })
     descripcion:string;
 

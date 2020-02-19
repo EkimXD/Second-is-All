@@ -7,26 +7,26 @@ import {UsuarioEntity} from "./usuario.entity";
 export class UsuarioService {
     constructor(
         @InjectRepository(UsuarioEntity)
-        private _repositorioRol: Repository<UsuarioEntity>
+        private _repositorioUsuario: Repository<UsuarioEntity>
     ) {}
 
-    encontrarUno(id: number): Promise<UsuarioEntity | undefined> {
-        return this._repositorioRol
-            .findOne(id);
+    encontrarUno(id_usuario: number): Promise<UsuarioEntity | undefined> {
+        return this._repositorioUsuario
+            .findOne(id_usuario);
     }
 
-    encontrarRoles(id: number): Promise<UsuarioEntity | undefined> {
-        return this._repositorioRol
-            .findOne(id);
+    encontrarRoles(id_usuario: number): Promise<UsuarioEntity | undefined> {
+        return this._repositorioUsuario
+            .findOne(id_usuario);
     }
 
     crearUno(usuario: UsuarioEntity) {
-        return this._repositorioRol
+        return this._repositorioUsuario
             .save(usuario);
     }
 
     borrarUno(id: number): Promise<DeleteResult> {
-        return this._repositorioRol
+        return this._repositorioUsuario
             .delete(id);
     }
 
@@ -35,7 +35,7 @@ export class UsuarioService {
         usuario: UsuarioEntity
     ): Promise<UsuarioEntity> {
         usuario.id_usuario = id;
-        return this._repositorioRol
+        return this._repositorioUsuario
             .save(usuario); // UPSERT
     }
 
@@ -49,7 +49,7 @@ export class UsuarioService {
             nombre: 'ASC'
         }
     ): Promise<UsuarioEntity[]> {
-        return this._repositorioRol
+        return this._repositorioUsuario
             .find({
                 where: where,
                 skip: skip,

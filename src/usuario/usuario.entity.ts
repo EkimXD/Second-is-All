@@ -1,5 +1,7 @@
-import {Column, Entity, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {RolEntity} from "../rol/rol.entity";
+import {CabCarritoEntity} from "../cab_carrito/cab-carrito.entity";
+import {ProductoEntity} from "../producto/producto.entity";
 
 @Entity('usuario_web')
 export class UsuarioEntity {
@@ -88,10 +90,23 @@ export class UsuarioEntity {
     })
     contrasena?: string;
 
-  @ManyToMany(
-      type => RolEntity,
-      rol=>rol.usuario
-  )
-  @JoinTable()
-  rol: RolEntity[];
+
+    @ManyToMany(
+        type => RolEntity,
+        rol => rol.usuario
+    )
+    @JoinTable()
+    rol: RolEntity[];
+
+    @OneToMany(
+        type => CabCarritoEntity,
+        cab_carrito => cab_carrito.usuario,
+    )
+    cabCarrito: CabCarritoEntity[];
+
+    @OneToMany(
+        type => ProductoEntity,
+        cab_carrito => cab_carrito.usuario,
+    )
+    producto: ProductoEntity[];
 }

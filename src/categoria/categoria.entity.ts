@@ -1,4 +1,4 @@
-import {Column, Entity, Index, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Index, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ProductoEntity} from "../producto/producto.entity";
 
 
@@ -32,9 +32,9 @@ export class CategoriaEntity {
     })
     descripcion:string;
 
-    @ManyToMany(
+    @OneToMany(
         type=>ProductoEntity,
         producto=>producto.categoria
     )
-    producto:ProductoEntity;
+    producto:ProductoEntity[];
 }

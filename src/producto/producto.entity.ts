@@ -1,18 +1,22 @@
-import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { DetCarritoEntity } from '../det_carrito/det-carrito.entity';
+import {UsuarioEntity} from "../usuario/usuario.entity";
 import {CategoriaEntity} from "../categoria/categoria.entity";
 
-
-@Entity('producto')
+@Entity('productos')
 export class ProductoEntity {
 
     @PrimaryGeneratedColumn({
         type:'int',
         unsigned:true,
         name:'id_producto',
-        comment:'Identificador de la tabla'
+        comment:'identificador del producto'
     })
     id:number;
 
+    @Index({
+        unique:false
+    })
     @Column({
         type:'varchar',
         nullable:false,
@@ -20,22 +24,6 @@ export class ProductoEntity {
         comment:'Nombre del producto'
     })
     nombre:string;
-
-    @Column({
-        type:'varchar',
-        nullable:false,
-        name:'estado_uso_producto',
-        comment:'Que tan usado esta el producto'
-    })
-    estado:string;
-
-    @Column({
-        type:'varchar',
-        nullable:false,
-        name:'fecha_publicacion_producto',
-        comment:'Fecha de publicacion del producto'
-    })
-    fecha:string;
 
     @Column({
         type:'varchar',
@@ -53,25 +41,21 @@ export class ProductoEntity {
     })
     costo:number;
 
-    @Column({
-        type:'int',
-        nullable:false,
-        name:'cantidad_producto',
-        comment:'Cantidad del producto'
-    })
-    cantidad:number;
+    @ManyToOne(
+        type => UsuarioEntity,
+        cliente=>cliente.producto
+    )
+    usuario:UsuarioEntity;
 
-    @Column({
-        type:'varchar',
-        nullable:true,
-        name:'imagen_producto',
-        comment:'Imagen del producto'
-    })
-    imagen:string;
+    @OneToMany(
+      type => DetCarritoEntity,
+      detalle=>detalle.producto
+    )
+    detalle:DetCarritoEntity[];
 
-    @ManyToMany(
+    @ManyToOne(
         type => CategoriaEntity,
         categoria=>categoria.producto
     )
-    categoria:CategoriaEntity[];
+    categoria:CategoriaEntity;
 }

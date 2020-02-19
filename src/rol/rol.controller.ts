@@ -1,4 +1,4 @@
-import {BadRequestException, Body, Controller, Delete, Get, Param, Post, Query} from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Query, Session } from '@nestjs/common';
 import {RolEntity} from "./rol.entity";
 import {RolService} from "./rol.service";
 import {RolCreateDto} from "./rol.create-dto";
@@ -14,7 +14,7 @@ export class RolController {
     ) {}
 
 
-    @Get('callme')
+    @Get('sayhey')
     sayName(){
         return 'rol'
     }
@@ -58,24 +58,87 @@ export class RolController {
     @Post()
     async agregarRol(
         @Body() rol:RolEntity,
+        @Session() session,
     ):Promise<RolEntity>{
-        let rolDto=new RolCreateDto();
-        rolDto.rol=rol.nombre;
-        rolDto.descripcion=rol.descripcion;
-        const validadion=await validate(rolDto);
-        if(validadion.length===0){
-            return this._rolService.crearUno(rol);
-        }else{
-            throw new BadRequestException('Error en validacion');
+        if (session.usuario!==undefined){
+            let bandera:boolean=false;
+            session.usuario.roles.forEach(value=>{
+                if(value==="AD"){
+                    bandera=true;
+                }
+            });
+            if(bandera){
+                const validadion=await validate(this.rolDTo(rol));
+                if(validadion.length===0){
+                    return this._rolService.crearUno(rol);
+                }else{
+                    throw new BadRequestException('Error en validacion');
+                }
+            }else{
+                throw new BadRequestException('No tiene permisos');
+            }
+        }else {
+            throw new BadRequestException("No existe una sesion activa");
         }
+
+    }
+
+    @Post(":id")
+    async editarRol(
+      @Body() rol:RolEntity,
+      @Param("id") id:string,
+      @Session() session,
+    ):Promise<RolEntity>{
+        if (session.usuario!==undefined){
+            let bandera:boolean=false;
+            session.usuario.roles.forEach(value=>{
+                if(value==="AD"){
+                    bandera=true;
+                }
+            });
+            if(bandera){
+                const validadion=await validate(this.rolDTo(rol));
+                if(validadion.length===0) {
+                    return this._rolService.actualizarUno(+id, rol);
+                }else{
+                    throw new BadRequestException("Error validando");
+                }
+            }else{
+                throw new BadRequestException("No tiene permisos para realizar esta accion");
+            }
+        }else{
+            throw new BadRequestException("No existe una sesion activa");
+        }
+
     }
 
     @Delete(':id')
     borrarRol(
         @Param('id')id:string,
+        @Session()session
     ):Promise<DeleteResult>{
-        return this._rolService.borrarUno(+id);
+        if (session.usuario!==undefined){
+            let bandera:boolean=false;
+            session.usuario.roles.forEach(value=>{
+                if(value==="AD"){
+                    bandera=true;
+                }
+            });
+            if(bandera){
+                return this._rolService.borrarUno(+id);
+            }else{
+                throw new BadRequestException("No posee permisos para realizar esta accion");
+            }
+        }else{
+            throw new BadRequestException("No existe una sesion activa");
+        }
     }
 
+    private rolDTo (rol: RolEntity):RolCreateDto{
+        let rolDto=new RolCreateDto();
+        rolDto.rol=rol.nombre;
+        rolDto.descripcion=rol.descripcion;
+        return rolDto;
+    }
 
 }
