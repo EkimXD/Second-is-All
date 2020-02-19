@@ -16,7 +16,7 @@ import {UsuarioEntity} from "./usuario.entity";
 import {UsuarioCreateDto} from "./usuario.create-dto";
 import {validate} from "class-validator";
 import {RolService} from "../rol/rol.service";
-import {DeleteResult} from "typeorm";
+import {DeleteResult, Like} from "typeorm";
 import {UsuarioLoginDto} from "./usuario.login-dto";
 import {RolEntity} from "../rol/rol.entity";
 import {errorComparator} from "tslint/lib/verify/lintError";
@@ -296,7 +296,36 @@ export class UsuarioController {
         }
     }
 
+    @Get()
+    listarUsuarios(
+        @Query("buscar") buscar:string,
+        @Session()session,
+    ):Promise<UsuarioEntity[]>{
+        if (session.usuario !== undefined) {
+            let ban = false;
 
+            session.usuario.roles.forEach(value => {
+                if (value == "AD") {
+                    ban = true;
+                }
+            });
+
+            if (ban) {
+                let consulta={};
+                if (buscar){
+                    consulta=[
+                        {id_usuario:buscar},
+                        {nombre:Like(`%${buscar}%`)}
+                    ]
+                }
+                return this._usuarioService.buscar(consulta,["rol"]);
+            } else {
+                throw new BadRequestException("No posee permisos para realizar esta accion")
+            }
+        } else {
+            throw new BadRequestException("No existe sesion activa");
+        }
+    }
 
     usuarioDTOtoGE(usuario: UsuarioEntity): UsuarioCreateDto {
         let usuarioDTO = new UsuarioCreateDto();
