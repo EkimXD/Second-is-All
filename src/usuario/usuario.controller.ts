@@ -6,7 +6,7 @@ import {
     Get,
     Module,
     Param,
-    Post, Query,
+    Post, Put, Query,
     Req,
     Res,
     Session,
@@ -32,31 +32,30 @@ export class UsuarioController {
 
     @Get('login')
     rutaLogin(
-      @Res() res,
-    ){
+        @Res() res,
+    ) {
         res.render('login/login')
     }
 
     @Get('principal')
     rutaPrincipal(
-      @Res() res,
-    ){
+        @Res() res,
+    ) {
         res.render('componentes/principal')
     }
 
     @Get('rutas/crear-usuario')
     async rutaCrearUsuarios(
-
-      @Query('error') error: string,
-      @Res() res,
-    ){
+        @Query('error') error: string,
+        @Res() res,
+    ) {
         res.render(
-          'usuario/rutas/crear-usuario',
-          {
-              datos: {
-                  error,
-              },
-          }
+            'usuario/rutas/crear-usuario',
+            {
+                datos: {
+                    error,
+                },
+            }
         );
     }
 
@@ -95,32 +94,32 @@ export class UsuarioController {
                 {nick: usuario},
                 {correo: usuario}
             ];
-            await this._usuarioService.buscar(where,['rol'])
+            await this._usuarioService.buscar(where, ['rol'])
                 .then(
                     async resultado => {
                         try {
-                            const result:UsuarioEntity=resultado[0];
-                            if (result.contrasena===contrasena){
-                                let arregloRoles:Array<string>=new Array<string>();
-                                result.rol.forEach((rol)=>{
-                                   arregloRoles.push(rol.nombre);
+                            const result: UsuarioEntity = resultado[0];
+                            if (result.contrasena === contrasena) {
+                                let arregloRoles: Array<string> = new Array<string>();
+                                result.rol.forEach((rol) => {
+                                    arregloRoles.push(rol.nombre);
                                 });
-                                session.usuario={
-                                    id_usuario:result.id_usuario,
-                                    usuario:result.nick,
-                                    roles:arregloRoles
+                                session.usuario = {
+                                    id_usuario: result.id_usuario,
+                                    usuario: result.nick,
+                                    roles: arregloRoles
                                 };
 
                                 res.render('usuario/principal?mensaje=Usuario logeado',
-                                  {
-                                    usuario:result.nick
-                                })
+                                    {
+                                        usuario: result.nick
+                                    })
 
-                            }else {
+                            } else {
                                 console.log('Contrasena incorrecta');
                                 res.redirect('/inicio/login?error=Contrasena incorrecta',)
                             }
-                        }catch (e) {
+                        } catch (e) {
                             console.log(e);
                             throw new BadRequestException('Imposible crear una nueva sesion, su usuario no existe o exiten duplicados');
                         }
@@ -138,12 +137,27 @@ export class UsuarioController {
 
     @Delete(':id')
     borrarUsusario(
-        @Param('id') id: string
+        @Param('id') id: string,
+        @Session()session,
     ): Promise<DeleteResult> {
-        try {
-            return this._usuarioService.borrarUno(+id);
-        } catch (e) {
-            console.log(e)
+        if (session.usuario !== undefined) {
+            let ban = false;
+            if (session.usuario.id_usuario == id) {
+                ban = true;
+            } else {
+                session.usuario.roles.forEach(value => {
+                    if (value == "AD") {
+                        ban = true;
+                    }
+                })
+            }
+            if (ban) {
+                return this._usuarioService.borrarUno(+id);
+            } else {
+                throw new BadRequestException("No tiene permisos para realizar esta accion");
+            }
+        } else {
+            throw new BadRequestException("No existe una session activa");
         }
     }
 
@@ -152,7 +166,7 @@ export class UsuarioController {
         @Body() usuario: UsuarioEntity,
         @Res() res,
     ) {
-      console.log(usuario)
+        console.log(usuario)
         const validacion = await validate(this.usuarioDTOtoGE(usuario));
         if (validacion.length === 0) {
             const where = [{
@@ -173,7 +187,7 @@ export class UsuarioController {
                             res.redirect('/inicio/login?mensaje=Usuario creado exitosamente')
                         } else {
                             res.redirect(
-                              '/usuario/rutas/crear-usuario?error=Error del servidor roles',
+                                '/usuario/rutas/crear-usuario?error=Error del servidor roles',
                             )
                             //throw new BadRequestException('No se puede crear usuario, no existen roles aplicables');
                         }
@@ -186,7 +200,7 @@ export class UsuarioController {
                 );
         } else {
             res.redirect(
-              '/usuario/rutas/crear-usuario?error=Error validando',
+                '/usuario/rutas/crear-usuario?error=Error validando',
             )
             //throw new BadRequestException(`Error validando \n${validacion}`)
         }
@@ -195,51 +209,94 @@ export class UsuarioController {
 
     @Post(':id')
     async editarUsuario(
-        @Body()usuario:UsuarioEntity,
-        @Param('id')id:string,
+        @Body()usuario: UsuarioEntity,
+        @Param('id')id: string,
         @Session()session,
-    ):Promise<UsuarioEntity|void>{
-        if(session.usuario!==undefined){
-            let ban=false;
-            if(session.usuario.id_usuario==id){
-                ban=true;
-            }else{
-                session.usuario.roles.forEach(value=>{
-                    if (value=="AD"){
-                        ban=true;
+    ): Promise<UsuarioEntity | void> {
+        if (session.usuario !== undefined) {
+            let ban = false;
+            if (session.usuario.id_usuario == id) {
+                ban = true;
+            } else {
+                session.usuario.roles.forEach(value => {
+                    if (value == "AD") {
+                        ban = true;
                     }
                 })
             }
-            if(ban){
-                let validacion=await validate(this.usuarioDTOtoGE(usuario));
-                if (validacion.length==0){
+            if (ban) {
+                let validacion = await validate(this.usuarioDTOtoGE(usuario));
+                if (validacion.length == 0) {
                     return this._usuarioService.encontrarUno(+id)
                         .then(
                             value => {
-                                value.correo=usuario.correo;
-                                value.nick=usuario.nick;
-                                value.contrasena=usuario.contrasena;
-                                value.telefono=usuario.telefono;
-                                value.fecha_nac=usuario.fecha_nac;
-                                value.apellido=usuario.apellido;
-                                value.nombre=usuario.nombre;
-                                return this._usuarioService.actualizarUno(+id,value);
+                                value.correo = usuario.correo;
+                                value.nick = usuario.nick;
+                                value.contrasena = usuario.contrasena;
+                                value.telefono = usuario.telefono;
+                                value.fecha_nac = usuario.fecha_nac;
+                                value.apellido = usuario.apellido;
+                                value.nombre = usuario.nombre;
+                                return this._usuarioService.actualizarUno(+id, value);
                             }
                         ).catch(
                             reason => {
                                 throw new BadRequestException(reason);
                             }
                         )
-                }else{
+                } else {
                     throw new BadRequestException("Error en validacion");
                 }
-            }else {
+            } else {
                 throw new BadRequestException("No posee permisos para realizar esta accion")
             }
-        }else{
+        } else {
             throw new BadRequestException("No existe sesion activa");
         }
     }
+
+    @Put(':idusuario')
+    async AgregarEliminarRolUsuario( //si existe el rol lo elimina, si no lo agrega, necesitas ser admin
+        @Param('idusuario')id: string,
+        @Query("rolid") rolid: string,
+        @Session()session,
+    ): Promise<UsuarioEntity | void> {
+        if (session.usuario !== undefined) {
+            let ban = false;
+
+            session.usuario.roles.forEach(value => {
+                if (value == "AD") {
+                    ban = true;
+                }
+            });
+
+            if (ban) {
+                return this._usuarioService.buscar({id_usuario: +id}, ["rol"])
+                    .then(
+                        async value => {
+                            const existe=value[0].rol.findIndex((value1) => value1.id==+rolid);
+                            const rol:RolEntity=await this._rolService.encontrarUno(+rolid);
+                            if(existe>=0){
+                                value[0].rol.splice(existe,1);
+                            }else{
+                                value[0].rol.push(rol);
+                            }
+                            return this._usuarioService.actualizarUno(+id, value[0]);
+                        }
+                    ).catch(
+                        reason => {
+                            throw new BadRequestException(reason);
+                        }
+                    )
+            } else {
+                throw new BadRequestException("No posee permisos para realizar esta accion")
+            }
+        } else {
+            throw new BadRequestException("No existe sesion activa");
+        }
+    }
+
+
 
     usuarioDTOtoGE(usuario: UsuarioEntity): UsuarioCreateDto {
         let usuarioDTO = new UsuarioCreateDto();
