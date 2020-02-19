@@ -3,7 +3,7 @@ import {ProductoEntity} from './producto.entity';
 import {validate} from 'class-validator';
 import {ProductoService} from './producto.service';
 import {ProductoCreateDto} from './producto.create-dto';
-import {DeleteResult} from 'typeorm';
+import {DeleteResult, Like} from 'typeorm';
 import {UsuarioService} from "../usuario/usuario.service";
 import {UsuarioEntity} from "../usuario/usuario.entity";
 import {CategoriaService} from "../categoria/categoria.service";
@@ -34,7 +34,7 @@ export class ProductoController {
             const validacion = await validate(this.productoDTO(producto));
             if (validacion.length === 0) {
                 producto.usuario = await this.usuario(session.usuario.id_usuario);
-                producto.categoria=await this.categoria(+idCategoria);
+                if(idCategoria) producto.categoria=await this.categoria(+idCategoria);
                 return this._productoService.crearUno(producto);
             } else {
                 throw new BadRequestException('error en validacion');
@@ -112,7 +112,7 @@ export class ProductoController {
     ): Promise<ProductoEntity[]> {
         let where = {};
         if (producto !== undefined) {
-            where = {nombre: `%${producto}%`}
+            where = {nombre: Like(`%${producto}%`)}
         }
         return this._productoService.buscar(where);
     }
