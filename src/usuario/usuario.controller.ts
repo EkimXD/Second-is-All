@@ -111,7 +111,10 @@ export class UsuarioController {
                                     roles:arregloRoles
                                 };
 
-                                res.redirect('/usuario/principal?mensaje=Usuario logeado',)
+                                res.render('usuario/principal?mensaje=Usuario logeado',
+                                  {
+                                    usuario:result.nick
+                                })
 
                             }else {
                                 console.log('Contrasena incorrecta');
@@ -193,7 +196,8 @@ export class UsuarioController {
     @Post(':id')
     async editarUsuario(
         @Body()usuario:UsuarioEntity,
-        @Param('id')id:string
+        @Param('id')id:string,
+        @Res() res,
     ){
         try {
             usuario.id_usuario= +id;
