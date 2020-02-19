@@ -197,31 +197,48 @@ export class UsuarioController {
     async editarUsuario(
         @Body()usuario:UsuarioEntity,
         @Param('id')id:string,
-        @Res() res,
-    ){
-        try {
-            usuario.id_usuario= +id;
-            let validacion=await validate(this.usuarioDTOtoGE(usuario));
-            if (validacion.length==0){
-                this._usuarioService.buscar({id_usuario:+id},['rol'])
-                    .then(
-                        resultado=>{
-                            usuario.rol=resultado[0].rol;
-                        }
-                    )
-                    .catch(
-                        error=>{
-                            console.log(error)
-                        }
-                    )
+        @Session()session,
+    ):Promise<UsuarioEntity|void>{
+        if(session.usuario!==undefined){
+            let ban=false;
+            if(session.usuario.id_usuario==id){
+                ban=true;
             }else{
-                //todo algo :v
+                session.usuario.roles.forEach(value=>{
+                    if (value=="AD"){
+                        ban=true;
+                    }
+                })
             }
-
-        }catch (e) {
-            console.log(e);
+            if(ban){
+                let validacion=await validate(this.usuarioDTOtoGE(usuario));
+                if (validacion.length==0){
+                    return this._usuarioService.encontrarUno(+id)
+                        .then(
+                            value => {
+                                value.correo=usuario.correo;
+                                value.nick=usuario.nick;
+                                value.contrasena=usuario.contrasena;
+                                value.telefono=usuario.telefono;
+                                value.fecha_nac=usuario.fecha_nac;
+                                value.apellido=usuario.apellido;
+                                value.nombre=usuario.nombre;
+                                return this._usuarioService.actualizarUno(+id,value);
+                            }
+                        ).catch(
+                            reason => {
+                                throw new BadRequestException(reason);
+                            }
+                        )
+                }else{
+                    throw new BadRequestException("Error en validacion");
+                }
+            }else {
+                throw new BadRequestException("No posee permisos para realizar esta accion")
+            }
+        }else{
+            throw new BadRequestException("No existe sesion activa");
         }
-
     }
 
     usuarioDTOtoGE(usuario: UsuarioEntity): UsuarioCreateDto {
