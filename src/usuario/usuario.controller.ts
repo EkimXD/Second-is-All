@@ -109,7 +109,12 @@ export class UsuarioController {
     rutaPrincipal(
         @Res() res,
     ) {
-        res.render('componentes/principal')
+        const result = 'user'
+        res.render('componentes/principal',{
+            user:{
+                nombre: result
+            }
+        })
     }
 
     @Get('rutas/crear-usuario')

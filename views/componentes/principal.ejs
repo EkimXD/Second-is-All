@@ -2,6 +2,17 @@
 <div class="container">
 
     <div class="container">
+        <div class="col-3 align-self-end">
+            <ul>
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><%= user.nombre%></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="#" class="dropdown-item">Editar Usuario</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/usuario/logout"class="dropdown-item">Logout</a>
+                </div>
+            </ul>
+        </div>
+
         <div class="row">
             <div class="col">
                 <div class="card" style="width: 18rem;">
@@ -77,6 +88,7 @@
 
         </div>
     </div>
+
 
 </div>
 
