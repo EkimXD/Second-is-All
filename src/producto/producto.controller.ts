@@ -1,4 +1,4 @@
-import {BadRequestException, Body, Controller, Delete, Get, Param, Post, Query, Session} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Query, Res, Session } from '@nestjs/common';
 import {ProductoEntity} from './producto.entity';
 import {validate} from 'class-validator';
 import {ProductoService} from './producto.service';
@@ -18,6 +18,22 @@ export class ProductoController {
         private readonly _categoriaService: CategoriaService,
     ) {
     }
+
+    @Get('rutas/crear-producto')
+    async rutaCrearUsuarios(
+      @Query('error') error: string,
+      @Res() res,
+    ) {
+        res.render(
+          'productos/rutas/crear-producto',
+          {
+              datos: {
+                  error,
+              },
+          }
+        );
+    }
+
 
     @Get('sayhey')
     hola() {
