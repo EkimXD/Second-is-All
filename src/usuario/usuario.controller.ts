@@ -178,7 +178,11 @@ export class UsuarioController {
                                     roles: arregloRoles
                                 };
 
-                                res.redirect('/usuario/principal?mensaje=Usuario logeado',)
+                                res.render('componentes/principal',{
+                                    user:{
+                                        nombre: result.nick
+                                    }
+                                })
 
                             } else {
                                 console.log('Contrasena incorrecta');
