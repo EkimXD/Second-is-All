@@ -83,8 +83,8 @@ export class CategoriaController {
                     const validacion = await validate(categoriadto);
                     if (validacion.length === 0) {
                         try {
-                            res.render(
-                                'categoria/ruta/buscar-mostrar-categoria'
+                            res.redirect(
+                                '/categoria'
                             );
                             return this._categoriaService.crearUno(categoria);
                         } catch (error) {
@@ -162,6 +162,7 @@ export class CategoriaController {
                         datos:{
                             titulo:"Editar categoria",
                             editable:true,
+                            editar:true,
                             categoria
                         }
 
@@ -195,7 +196,7 @@ export class CategoriaController {
         @Param("id")id:string,
         @Session() session,
         @Res()res,
-    ): Promise<CategoriaEntity> {
+    ){
         if(session.usuario!==undefined){
             let ban=false;
             session.usuario.roles.forEach(value=>{
@@ -210,14 +211,16 @@ export class CategoriaController {
                     const validacion = await validate(categoriadto);
                     if (validacion.length === 0) {
                         try {
-                            res.render(
-                                'categoria/ruta/buscar-mostrar-categoria'
+                            await this._categoriaService.actualizarUno(+id,categoria);
+                            res.redirect(
+                                '/categoria'
                             );
-                            return this._categoriaService.actualizarUno(+id,categoria);
+
                         } catch (error) {
                             console.log(error);
                         }
                     } else {
+                        console.log(categoria);
                         res.render(
                             'categoria/ruta/crear-categoria',
                             {
@@ -271,12 +274,12 @@ export class CategoriaController {
         }
     }
 
-    @Delete(':id')
+    @Post('/eliminar/:id')
     eliminarCategoria(
         @Param('id') idCategoria: string,
         @Session()session,
-    ): Promise<DeleteResult> {
-
+        @Res()res,
+    ) {
         if(session.usuario!==undefined){
             let ban=false;
             session.usuario.roles.forEach(value=>{
@@ -285,21 +288,50 @@ export class CategoriaController {
                 }
             });
             if (ban){
-                if(idCategoria)//todo agregar restriccion en creacion de categorias
+                if(idCategoria)
                 {
                     try {
-                        console.log(idCategoria);
-                        return this._categoriaService.borrarUno(+idCategoria);
+                        this._categoriaService.borrarUno(+idCategoria);
+                        res.redirect("/categoria");
+
                     } catch (e) {
-                        console.log(e);
+                        res.render(
+                            'categoria/ruta/crear-categoria',
+                            {
+                                datos:{
+                                    titulo:e.toString(),
+                                    editable:false,
+                                }
+
+                            }
+                        );
                     }
                 }
             }
             else{
-                throw new BadRequestException("no posee permisos para realizar esta accion");
+                res.render(
+                    'categoria/ruta/crear-categoria',
+                    {
+                        datos:{
+                            titulo:'no posee permisos para realizar esta accion',
+                            editable:false,
+                        }
+
+                    }
+                );
+
             }
         }else{
-            throw new BadRequestException("no existe una session activa");
+            res.render(
+                'categoria/ruta/crear-categoria',
+                {
+                    datos:{
+                        titulo:'no existe una session activa',
+                        editable:false,
+                    }
+
+                }
+            );
         }
     }
 
@@ -315,8 +347,10 @@ export class CategoriaController {
         const categorias=await this._categoriaService.buscar(where);
         res.render('categoria/ruta/buscar-mostrar-categoria',
             {
-                categorias
+                datos:{
+                    categorias
+                }
             });
-        return this._categoriaService.buscar(where);
+        return this._categoriaService.buscar();
     }
 }

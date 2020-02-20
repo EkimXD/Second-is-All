@@ -8,7 +8,7 @@
     <% if(datos.error){ %>
         <div class="alert alert-danger" role="alert"><%=datos.error%></div>
     <% } %>
-    <form action="/categoria/" method="post">
+    <form action="/categoria/<%=datos.editar?datos.categoria.id:""%>" method="post">
         <div class="form-group">
             <label for="nombreID">Nombre de la Categoria</label>
             <input id="nombreID"
@@ -32,7 +32,8 @@
         <button type="submit"
                 class="btn btn-success"
         >
-            Crear Categoria
+            <%=datos.editar==true?"Editar Categoria":"Crear Categoria"%>
+
         </button>
         <button type="reset"
                 class="btn btn-secondary"

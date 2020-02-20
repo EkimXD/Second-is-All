@@ -1,2 +1,38 @@
-holi!
-<%=categorias%>
+<%- include('../../compartido/cabecera') %>
+<div class="container">
+
+    <h1>Categorias</h1>
+
+    <a href="/categoria/crear">
+        <button type="button"
+                class="btn btn-primary">
+            Crear categoria
+        </button>
+    </a> <!-- anchor -> ancla -->
+
+    <form action="/categoria/"
+          method="GET"
+    >
+        <div class="form-group">
+            <label for="consultaID">Buscar categoria:</label>
+            <input id="consultaID"
+                   type="text"
+                   name="categoria"
+                   placeholder="Ej: Consumibles"
+                   title="Ingresar la busqueda por nombre de categoria"
+                   class="form-control">
+            <small id="cedulaIDHelp"
+                   class="form-text text-muted">
+                Puede buscar por nombre de categoria.
+            </small>
+        </div>
+    </form>
+
+    <%if(datos.categorias){%>
+        <%- include('../componentes/mostrar-tabla-categorias',{
+        categorias:datos.categorias
+        })%>
+    <%}%>
+
+</div>
+<%- include('../../compartido/pie-de-pagina') %>
