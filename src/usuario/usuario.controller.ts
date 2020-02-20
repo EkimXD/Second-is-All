@@ -30,6 +30,74 @@ export class UsuarioController {
     ) {
     }
 
+    @Get('ruta/mostrar-usuarios')
+    async rutaMostrarUsuarios(
+      @Query('mensaje') mensaje: string,
+      @Query('error') error: string,
+      @Query('consultaUsuario') consultaUsuario: string,
+      @Res() res,
+    ) {
+      let consultaServicio;
+      if (consultaUsuario) {
+        consultaServicio = [
+          {
+            nombre: Like('%' + consultaUsuario + '%'),
+          },
+        ];
+      }
+      const usuarios = await this._usuarioService.buscar(consultaServicio);
+      res.render(
+        'usuario/rutas/buscar-mostrar-usuario',
+        {
+          datos: {
+            // usuarios:usuarios -> nueva sintaxis,
+            mensaje,
+            usuarios,
+            error,
+          },
+        },
+      );
+    }
+
+    @Get('ruta/editar-usuario/:idUsuario')
+    async rutaEditarUsuario(
+      @Query('error') error: string,
+      @Param('idUsuario') idUsuario: string,
+      @Res() res,
+    ) {
+        const consulta = {
+            id_usuario: idUsuario,
+        };
+        try {
+            const arregloUsuarios = await this._usuarioService.buscar(consulta);
+            if (arregloUsuarios.length > 0) {
+                res.render(
+                  'usuario/rutas/crear-usuario',
+                  {
+                      datos: {error, usuario: arregloUsuarios[0]},
+                  },
+                );
+            } else {
+                res.redirect(
+                  '/usuario/ruta/mostrar-usuarios?error=No existe ese usuario',
+                );
+            }
+        } catch (error) {
+            console.log(error);
+            res.redirect(
+              '/usuario/ruta/buscar-mostrar-usuarios?error=Error editando usuario',
+            );
+        }
+
+    }
+
+    @Get('categoria-productos')
+    rutaCategoriaProductos(
+      @Res() res,
+    ){
+        res.render('componentes/categoria-productos')
+    }
+
     @Get('login')
     rutaLogin(
         @Res() res,
@@ -239,6 +307,7 @@ export class UsuarioController {
                                 value.nombre = usuario.nombre;
                                 return this._usuarioService.actualizarUno(+id, value);
                             }
+
                         ).catch(
                             reason => {
                                 throw new BadRequestException(reason);

@@ -1,0 +1,55 @@
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">N°</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Mail</th>
+        <th scope="col">Telefono</th>
+        <th scope="col">Nick</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% usuarios.forEach((usuario) => { %>
+        <tr>
+            <th scope="row">
+                <%= usuario.id_usuario%>
+            </th>
+            <td>
+                <%= usuario.nombre%>
+            </td>
+            <td>
+                <%= usuario.apellido%>
+            </td>
+            <td>
+                <%= usuario.correo%>
+            </td>
+            <td>
+                <%= usuario.telefono%>
+            </td>
+            <td>
+                <%= usuario.nick%>
+            </td>
+            <td>
+                <a href="/usuario/ruta/editar-usuario/<%= usuario.id_usuario %>">
+                    <button type="button"
+                            class="btn btn-info">
+                        Editar
+                    </button>
+                </a>
+
+                <form action="/usuario/<%= usuario.id_usuario %>"
+                      method="POST"
+                >
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </form>
+            </td>
+        </tr>
+    <%}); %>
+
+    </tbody>
+</table>

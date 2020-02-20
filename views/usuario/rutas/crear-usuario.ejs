@@ -1,9 +1,8 @@
 <%- include('../../compartido/cabecera') %>
-
+<% const estaEditando = datos.usuario != undefined%>
 
 <div class="container">
-
-
+    <h1><%= estaEditando ? 'Editando ' + datos.usuario.nick : 'Crear usuario' %></h1>
 
     <form action="/usuario"
           method="POST"
