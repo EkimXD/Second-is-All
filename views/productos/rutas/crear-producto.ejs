@@ -1,0 +1,65 @@
+<%- include('../../compartido/cabecera') %>
+
+<div class="container">
+
+    <form action="/producto"
+          method="POST"
+    >
+        <div class="form-group">
+            <label for="nombreID">Nombre del Producto</label>
+            <input id="nombreID"
+                   type="text"
+                   name="nombre"
+                   placeholder="Ej: libro"
+                   title="Ingresar nombre de producto"
+                   class="form-control">
+            <small id="nombreIDHelp"
+                   class="form-text text-muted">
+                Ingresa un nombre mayor a 3 caracteres y menor a 50
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcionID">Descripcion</label>
+            <input id="descripcionID"
+                   type="text"
+                   name="descripcion"
+                   placeholder="Ej: Esta casi nuevo"
+                   title="Ingresar descripcion del producto"
+                   class="form-control">
+            <small id="apellidoIDHelp"
+                   class="form-text text-muted">
+                Ingresa una descrpcion mayor a 3 caracteres y menor a 10
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="costoID">Costo</label>
+            <input id="costoID"
+                   step="any"
+                   type="number"
+                   name="costo"
+                   placeholder="Ej: 16,5"
+                   title="Ingresar costo del producto"
+                   class="form-control">
+            <small id="costoIDHelp"
+                   class="form-text text-muted">
+                Ingrese costo del producto
+            </small>
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+            Crear producto
+        </button>
+
+        <button type="reset"
+                class="btn btn-secondary">
+            Limpiar formulario
+        </button>
+
+    </form>
+
+
+</div>
+<%- include('../../compartido/pie-de-pagina') %>

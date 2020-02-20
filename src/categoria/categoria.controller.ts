@@ -142,9 +142,9 @@ export class CategoriaController {
         }
     }
 
-    @Get("/crear/:id")
-    EditarCartegoria(
-        @Param("id")
+    @Get(":id")
+    async EditarCartegoria(
+        @Param("id")id:string,
         @Res()res,
         @Session() session
     ){
@@ -156,11 +156,13 @@ export class CategoriaController {
                 }
             });
             if (ban){
+                const categoria=await this._categoriaService.encontrarUno(+id);
                 res.render('categoria/ruta/crear-categoria',
                     {
                         datos:{
-                            titulo:"Crear categoria",
-                            editable:true
+                            titulo:"Editar categoria",
+                            editable:true,
+                            categoria
                         }
 
                     });
@@ -170,7 +172,8 @@ export class CategoriaController {
                     {
                         datos:{
                             titulo:"No posee permisos para realizar esta accion",
-                            editable:false
+                            editable:false,
+                            editar:true,
                         }
 
                     });
@@ -182,7 +185,6 @@ export class CategoriaController {
                         titulo:"No existe una session activa",
                         editable:false
                     }
-
                 });
         }
     }
@@ -223,6 +225,7 @@ export class CategoriaController {
                                     titulo:"Editar categoria",
                                     error:'Error validando',
                                     editable:true,
+                                    editar:true,
                                     categoria,
                                 }
                             }
@@ -235,6 +238,7 @@ export class CategoriaController {
                             datos:{
                                 titulo:"Editar categoria",
                                 error:'No se envia categoria',
+                                editar:true,
                                 editable:true,
                             }
                         }
