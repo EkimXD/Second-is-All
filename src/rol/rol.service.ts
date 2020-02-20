@@ -16,6 +16,9 @@ export class RolService {
             .findOne(id);
     }
 
+    eliminarDatos(){
+        return this._repositorioRol.clear();
+    }
     crearUno(usuario: RolEntity) {
         return this._repositorioRol
             .save(usuario);
