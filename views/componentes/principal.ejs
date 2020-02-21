@@ -6,7 +6,7 @@
             <ul>
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><%= user.nombre%></a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item">Editar Usuario</a>
+                    <a href="/usuario/ruta/mostrar-usuarios-uno/<%= user.id %>" class="dropdown-item">Editar Usuario</a>
                     <a href="/producto/rutas/crear-producto" class="dropdown-item">Publicar Producto</a>
                     <div class="dropdown-divider"></div>
                     <a href="/usuario/logout"class="dropdown-item">Logout</a>
