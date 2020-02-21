@@ -43,14 +43,14 @@ export class ProductoController {
     @Post()
     async crearProducto(
         @Body() producto: ProductoEntity,
-        @Body("idCategoria") idCategoria: string,
         @Session()session,
     ): Promise<ProductoEntity> {
         if (session.usuario !== undefined) {
             const validacion = await validate(this.productoDTO(producto));
             if (validacion.length === 0) {
                 producto.usuario = await this.usuario(session.usuario.id_usuario);
-                if(idCategoria) producto.categoria=await this.categoria(+idCategoria);
+                console.log(producto.usuario.id_usuario);
+                if(1) producto.categoria=await this.categoria(1);
                 return this._productoService.crearUno(producto);
             } else {
                 throw new BadRequestException('error en validacion');
