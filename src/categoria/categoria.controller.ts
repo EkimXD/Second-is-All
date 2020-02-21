@@ -219,7 +219,7 @@ export class CategoriaController {
                             console.log(error);
                         }
                     } else {
-                        console.log(categoria);
+                        categoria.id= +id;
                         res.render(
                             'categoria/ruta/crear-categoria',
                             {
