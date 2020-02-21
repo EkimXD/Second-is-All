@@ -215,7 +215,6 @@ export class CategoriaController {
                             res.redirect(
                                 '/categoria'
                             );
-
                         } catch (error) {
                             console.log(error);
                         }
