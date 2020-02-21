@@ -14,18 +14,22 @@
             <input id="nombreID"
                    type="text"
                    name="nombre"
-                   placeholder="Ej: Consumibles"
+                   placeholder="Ej: AD"
                    value="<%=datos.rol?datos.rol.nombre:""%>"
-                   title="Ingresar nombre de la rol"
+                   title="Ingresar nombre del rol"
                    class="form-control">
+            <small id="nombreIDHelp"
+                   class="form-text text-muted">
+                Ingresa dos caracteres en mayusculas
+            </small>
         </div>
         <div class="form-group">
-            <label for="descripcionID">Descripcion de la rol</label>
+            <label for="descripcionID">Descripcion del rol</label>
             <input id="descripcionID"
                    type="text"
                    name="descripcion"
                    value="<%=datos.rol?datos.rol.descripcion:""%>"
-                   placeholder="Ej: Son todos aquellos productos que pueden ser consumidos"
+                   placeholder="Descripcion del rol"
                    title="Ingresar la descripcion de la rol"
                    class="form-control">
         </div>

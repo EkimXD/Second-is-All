@@ -44,7 +44,6 @@ export class RolController {
                         {descripcion: Like(`%${where}%`)},
                     ];
                 }
-                console.log("llego");
                 const roles = await this._rolService
                     .buscar(
                         where1
@@ -56,10 +55,74 @@ export class RolController {
                         }
                     });
             } else {
-                throw new BadRequestException('No tiene permisos');
+                res.render(
+                    'rol/ruta/crear-rol',
+                    {
+                        datos:{
+                            titulo:'No tiene permisos',
+                            editable:false
+                        }
+                    }
+                );
             }
         } else {
-            throw new BadRequestException("No existe una sesion activa");
+            res.render(
+                'rol/ruta/crear-rol',
+                {
+                    datos:{
+                        titulo:'No tiene permisos',
+                        editable:false
+                    }
+                }
+            );
+        }
+
+    }
+
+    @Get('/crear')
+    async agregar(
+        @Body() rol: RolEntity,
+        @Session() session,
+        @Res()res,
+    ) {
+        if (session.usuario !== undefined) {
+            let bandera: boolean = false;
+            session.usuario.roles.forEach(value => {
+                if (value === "AD") {
+                    bandera = true;
+                }
+            });
+            if (bandera) {
+                res.render(
+                    'rol/ruta/crear-rol',
+                    {
+                        datos:{
+                            titulo:'Editar rol',
+                            editable:true
+                        }
+                    }
+                )
+            } else {
+                res.render(
+                    'rol/ruta/crear-rol',
+                    {
+                        datos:{
+                            titulo:'No tiene permisos',
+                            editable:false
+                        }
+                    }
+                );
+            }
+        } else {
+            res.render(
+                'rol/ruta/crear-rol',
+                {
+                    datos:{
+                        titulo:'No existe una sesion activa',
+                        editable:false
+                    }
+                }
+            );
         }
 
     }
@@ -68,7 +131,8 @@ export class RolController {
     async agregarRol(
         @Body() rol: RolEntity,
         @Session() session,
-    ): Promise<RolEntity> {
+        @Res()res,
+    ){
         if (session.usuario !== undefined) {
             let bandera: boolean = false;
             session.usuario.roles.forEach(value => {
@@ -79,15 +143,42 @@ export class RolController {
             if (bandera) {
                 const validadion = await validate(this.rolDTo(rol));
                 if (validadion.length === 0) {
-                    return this._rolService.crearUno(rol);
+                    this._rolService.crearUno(rol);
+                    res.redirect('/rol/buscar');
                 } else {
-                    throw new BadRequestException('Error en validacion');
+                    res.render(
+                        'rol/ruta/crear-rol',
+                        {
+                            datos:{
+                                titulo:'No tiene permisos',
+                                editable:true,
+                                error:'error en validacion',
+                                rol
+                            }
+                        }
+                    );
                 }
             } else {
-                throw new BadRequestException('No tiene permisos');
+                res.render(
+                    'rol/ruta/crear-rol',
+                    {
+                        datos:{
+                            titulo:'No tiene permisos',
+                            editable:false
+                        }
+                    }
+                );
             }
         } else {
-            throw new BadRequestException("No existe una sesion activa");
+            res.render(
+                'rol/ruta/crear-rol',
+                {
+                    datos:{
+                        titulo:'No existe una sesion activa',
+                        editable:false
+                    }
+                }
+            );
         }
 
     }
@@ -113,6 +204,7 @@ export class RolController {
                         datos:{
                             titulo:'Editar rol',
                             editable:true,
+                            editar:true,
                             rol
                         }
                     }
@@ -148,7 +240,7 @@ export class RolController {
         @Param("id") id: string,
         @Session() session,
         @Res()res,
-    ): Promise<RolEntity> {
+    ){
         if (session.usuario !== undefined) {
             let bandera: boolean = false;
             session.usuario.roles.forEach(value => {
@@ -159,12 +251,36 @@ export class RolController {
             if (bandera) {
                 const validadion = await validate(this.rolDTo(rol));
                 if (validadion.length === 0) {
-                    return this._rolService.actualizarUno(+id, rol);
+                    this._rolService.actualizarUno(+id, rol);
+                    res.redirect("/rol/buscar")
                 } else {
-                    throw new BadRequestException("Error validando");
+                    rol.id= +id;
+                    res.render(
+                        'rol/ruta/crear-rol',
+                        {
+                            datos:{
+                                titulo:'Editar rol',
+                                editable:true,
+                                editar:true,
+                                error:"Error validando",
+                                rol
+                            }
+                        }
+                    );
                 }
             } else {
-                throw new BadRequestException("No tiene permisos para realizar esta accion");
+                res.render(
+                    'rol/ruta/crear-rol',
+                    {
+                        datos:{
+                            titulo:'No tiene permisos para realizar esta accion',
+                            editable:false,
+                            editar:true,
+                            error:"Error validando",
+                            rol
+                        }
+                    }
+                );
             }
         } else {
             res.render(
@@ -175,7 +291,7 @@ export class RolController {
                         editable:false,
                     }
                 }
-            );throw new BadRequestException("No existe una sesion activa");
+            )
         }
 
     }
