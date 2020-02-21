@@ -84,17 +84,19 @@ export class DetCarritoController {
         }
     }
 
-    @Delete(":id")
+    @Post("/eliminar/:id")
     eliminarDetalle(
         @Param("id") id: string,
         @Session()session,
-    ): Promise<DeleteResult | void> {
+        @Res()res,
+    ) {
         if (session.usuario !== undefined) {
             return this.esPropietario(id, session)
                 .then(
                     value => {
                         if (value) {
-                            return this._detCarrito.borrarUno(+id);
+                             this._detCarrito.borrarUno(+id);
+                            res.redirect("/cab-carrito")
                         } else {
                             throw new BadRequestException("no tiene permisos para esta accion");
                         }

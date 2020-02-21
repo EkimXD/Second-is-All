@@ -2,7 +2,7 @@
 <%- include('../../compartido/cabecera')%>
 <div class="container">
 
-    <form action="/cab-carrito"
+    <form action="cab-carrito/comprar/<%= datos.detalles? datos.detalles.id : '' %>"
           method="POST"
     >
 
@@ -28,6 +28,7 @@
                        type="text"
                        name="direccion"
                        placeholder="Ej: Los laureles"
+                       value="<%= datos.detalles? datos.detalles.id : '' %>"
                        title="Ingresar direccion del usuario"
                        class="form-control">
                 <small id="direccionIDHelp"
@@ -59,7 +60,7 @@
                    step="any"
                    type="number"
                    name="total"
-                   value="<%= datos.detalles? datos.detalles.fecha : ''  %>"
+                   value="<%= datos.detalles? datos.detalles.total : ''  %>"
                    placeholder="Ej: 16,5"
                    title="Ingresar costo del producto"
                    class="form-control">
@@ -75,8 +76,10 @@
         </button>
 
     </form>
-
-
+<%- include("../componentes/crear-tabla-carrito", {
+    detalles: datos.detalles.detalle
+})
+%>
 
 
 </div>

@@ -105,9 +105,9 @@ export class CabCarritoController {
     @Param('id') id: string,
     @Session() session,
     @Res() res,
-  ): Promise<CabCarritoEntity | void> {
+  ) {
     if (session.usuario !== undefined) {
-      return this.esPropietario(id, session)
+      this.esPropietario(id, session)
         .then(
           async bandera => {
             if (bandera) {
@@ -124,7 +124,8 @@ export class CabCarritoController {
             this.actualizarCabecera(+id);
             value.fecha = `${f.getFullYear()}/${f.getMonth() + 1}/${f.getDate()}`;
             this.crearCab('N/A', session,res);
-            return this._cabCarritoService.actualizarUno(+id, value);
+            this._cabCarritoService.actualizarUno(+id, value);
+            res.redirect('/cab-carrito/comprado/'+id);
           },
         )
         .catch(
@@ -155,16 +156,45 @@ export class CabCarritoController {
   }
 
   @Get()
-  buscarCabeceras(
+  async buscarCabeceras(
     @Session()session,
-  ): Promise<CabCarritoEntity[]> {
+    @Res() res,
+  ) {
     if (session.usuario !== undefined) {
       const id: number = session.usuario.id_usuario;
-      return this._cabCarritoService.buscar({ usuario: id }, [], 0, 10, { fecha: 'DESC' });
+      const cabecera = await this._cabCarritoService.buscar({ usuario: id , estado:"Creado"}, ['detalle']);
+      console.log(cabecera)
+      res.render('cabecera/rutas/buscar-mostrar-detalle',
+        {
+          datos: {
+            detalles: cabecera[0]
+          }
+        })
     } else {
       throw new BadRequestException('No existe una sesion activa');
     }
   }
+
+  @Get("/comprado/:id")
+  async buscar(
+    @Param("id")id:string,
+    @Session()session,
+    @Res() res,
+  ) {
+    if (session.usuario !== undefined) {
+      const cabecera = await this._cabCarritoService.buscar({ id: id }, ['detalle']);
+      console.log(cabecera)
+      res.render('cabecera/rutas/buscar-mostrar-detalle',
+        {
+          datos: {
+            detalles: cabecera[0]
+          }
+        })
+    } else {
+      throw new BadRequestException('No existe una sesion activa');
+    }
+  }
+
 
   @Get('bAdmin')
   buscarCabecerasAdmin(
