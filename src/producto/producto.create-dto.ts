@@ -13,6 +13,6 @@ export class ProductoCreateDto {
   descripcion:string;
 
   @IsNotEmpty()
-  @Min(0)
+  // @Min(0)
   costo:number;
 }

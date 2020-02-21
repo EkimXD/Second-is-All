@@ -2,9 +2,14 @@
 
 <div class="container">
 
+    <% if(datos.error){ %>
+    <div class="alert alert-danger" role="alert"><%=datos.error%></div>
+    <% } %>
+
     <form action="/producto"
           method="POST"
     >
+
         <div class="form-group">
             <label for="nombreID">Nombre del Producto</label>
             <input id="nombreID"

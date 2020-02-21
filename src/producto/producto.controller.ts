@@ -24,10 +24,12 @@ export class ProductoController {
       @Query('error') error: string,
       @Res() res,
     ) {
+        const categorias=await this._categoriaService.buscar();
         res.render(
           'productos/rutas/crear-producto',
           {
               datos: {
+                  categorias,
                   error,
               },
           }
@@ -43,22 +45,37 @@ export class ProductoController {
     @Post()
     async crearProducto(
         @Body() producto: ProductoEntity,
+        @Query("idcategoria") idcategoria:string,
         @Session()session,
-    ): Promise<ProductoEntity> {
+        @Res()res,
+    ){
+        console.log("llego");
         if (session.usuario !== undefined) {
+            console.log("llego");
             const validacion = await validate(this.productoDTO(producto));
-            if (validacion.length === 0) {
+            if (validacion.length === 0&&producto.costo>=0) {
                 producto.usuario = await this.usuario(session.usuario.id_usuario);
                 try {
-                    producto.categoria=await this.categoria(1);
-                }catch (e) {
-                }
-                return this._productoService.crearUno(producto);
+                    producto.categoria=await this.categoria(+idcategoria);
+                }catch (e) {}
+                console.log("entro");
+                this._productoService.crearUno(producto);
+                res.redirect("/producto");
             } else {
-                throw new BadRequestException('error en validacion');
+                res.redirect("/producto/rutas/crear-producto?error=error en validacion");
             }
         } else {
-            throw new BadRequestException('No existe una sesion activa');
+            console.log("mal");
+            res.render(
+                'categoria/ruta/crear-categoria',
+                {
+                    datos:{
+                        titulo:'No existe una sesion activa',
+                        editable:false,
+                    }
+
+                }
+            );
         }
     }
 
