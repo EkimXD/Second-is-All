@@ -59,7 +59,7 @@ export class DetCarritoController {
                             this._cabeceraControler.actualizarCabecera(result[0].id);
                             res.redirect("/producto")
                         } else {
-                            await this._cabeceraControler.crearCab('N/A', session);
+                            await this._cabeceraControler.crearCab('N/A', session,res);
                             this.agregarDetalle(idProducto, session, res);
 
                         }
