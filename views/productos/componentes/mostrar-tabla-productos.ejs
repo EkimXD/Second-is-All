@@ -29,15 +29,17 @@
                     <%= producto.costo%>
                 </td> <!-- table detail -->
                 <td>
-                    <a href="producto/<%= producto.id %>">
-                        <button type="button"
-                                class="btn btn-success bounce">
+                    <form action="/det-carrito?idproducto=<%= producto.id %>"
+                          method="post"
+                    >
+                        <button type="submit"
+                                class="btn btn-success">
                             Comprar
                         </button>
-                    </a>
+                    </form>
                 </td> <!-- table detail -->
                 <td>
-                    <a href="/producto/<%= producto.id %>">
+                    <a href="producto/<%= producto.id %>">
                         <button type="button"
                                 class="btn btn-info">
                             Editar
