@@ -1,0 +1,41 @@
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">N</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Subtotal</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% detalles.forEach((detalle) => { %>
+        <tr>
+            <th scope="row">
+                <%= detalle.id%>
+            </th>
+            <td>
+                hola
+            </td>
+            <td>
+                <%= detalle.precio%>
+            </td>
+            <td>
+                <%= detalle.subtotal%>
+            </td>
+            <td>
+
+                <form action="/usuario/<%= usuario.id_usuario %>"
+                      method="POST"
+                >
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </form>
+            </td>
+        </tr>
+    <%}); %>
+
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Session } from '@nestjs/common';
+import {BadRequestException, Body, Controller, Delete, Get, Param, Post, Res, Session} from '@nestjs/common';
 import { CabCarritoService } from './cab-carrito.service';
 import { CabCarritoEntity } from './cab-carrito.entity';
 import { CabCarritoCreateDto } from './cab-carrito.create-dto';
@@ -24,6 +24,7 @@ export class CabCarritoController {
   async crearCab(
     @Body('direccion') direccion: string,
     @Session() session,
+    @Res()res
   ): Promise<CabCarritoEntity> {
     if (session.usuario !== undefined) {
       let cabecera = this.generarCabecera();
@@ -103,6 +104,7 @@ export class CabCarritoController {
   async comprarCabecera(
     @Param('id') id: string,
     @Session() session,
+    @Res() res,
   ): Promise<CabCarritoEntity | void> {
     if (session.usuario !== undefined) {
       return this.esPropietario(id, session)
@@ -121,7 +123,7 @@ export class CabCarritoController {
             value.estado = 'Comprado';
             this.actualizarCabecera(+id);
             value.fecha = `${f.getFullYear()}/${f.getMonth() + 1}/${f.getDate()}`;
-            this.crearCab('N/A', session);
+            this.crearCab('N/A', session,res);
             return this._cabCarritoService.actualizarUno(+id, value);
           },
         )

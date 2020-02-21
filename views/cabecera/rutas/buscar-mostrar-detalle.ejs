@@ -1,0 +1,92 @@
+<%- include('../../compartido/cabecera')%>
+<div class="container">
+
+    <form action="/cab-carrito"
+          method="POST"
+    >
+
+        <div class="row">
+            <div class="col">
+                <label for="feachaID">Fecha </label>
+                <input id="fechaID"
+                       type="text"
+                       name="fecha"
+                       value="<%= datosCabecera.fecha %>"
+                       placeholder="Ej: aaaa/mm/dd"
+                       title="Ingresar fecha "
+                       class="form-control"
+                >
+                <small id="fechaIDHelp"
+                       class="form-text text-muted">
+                    Ingresa fecha con el formato dd/mm/aaaa
+                </small>
+            </div>
+            <div class="col">
+                <label for="direccionID">Direccion</label>
+                <input id="direccionID"
+                       type="text"
+                       name="direccion"
+                       placeholder="Ej: Los laureles"
+                       title="Ingresar direccion del usuario"
+                       class="form-control">
+                <small id="direccionIDHelp"
+                       class="form-text text-muted">
+                    Ingrese direccion del usuario
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="estadoID">Estado</label>
+            <input id="estadoID"
+                   type="text"
+                   name="estado"
+                   value="<%= datosCabecera.estado %>"
+                   placeholder="Ej: disponible"
+                   title="Ingresar estado de compra"
+                   class="form-control">
+            <small id="estadoIDHelp"
+                   class="form-text text-muted">
+                Ingresa un nombre mayor a 3 caracteres y menor a 50
+            </small>
+        </div>
+
+
+        <div class="form-group">
+            <label for="totalID">Total</label>
+            <input id="totalID"
+                   step="any"
+                   type="number"
+                   name="total"
+                   value="<%= datosCabecera.total %>"
+                   placeholder="Ej: 16,5"
+                   title="Ingresar costo del producto"
+                   class="form-control">
+            <small id="totalIDHelp"
+                   class="form-text text-muted">
+                Ingrese costo del producto
+            </small>
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+            Crear producto
+        </button>
+
+        <button type="reset"
+                class="btn btn-secondary">
+            Limpiar formulario
+        </button>
+
+    </form>
+
+
+    <%- include('../componentes/crear-tabla-carrito',
+    {
+    detalles: datos.detalles
+    }) %>
+
+</div>
+
+
+<%- include('../../compartido/pie-de-pagina')%>
