@@ -8,6 +8,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Descripcion</th>
         <th scope="col">Precio</th>
+        <th scope="col">Acciones</th>
     </tr>
     </thead>
 
@@ -25,6 +26,9 @@
                     <%= producto.descripcion%>
                 </td> <!-- table detail -->
                 <td>
+                    <%= producto.costo%>
+                </td> <!-- table detail -->
+                <td>
                     <a href="producto/<%= producto.id %>">
                         <button type="button"
                                 class="btn btn-success bounce">
@@ -33,7 +37,7 @@
                     </a>
                 </td> <!-- table detail -->
                 <td>
-                    <a href="producto/<%= producto.id %>">
+                    <a href="/producto/<%= producto.id %>">
                         <button type="button"
                                 class="btn btn-info">
                             Editar
@@ -42,7 +46,7 @@
                 </td> <!-- table detail -->
                 <td>
                     <form action="/producto/eliminar/<%= producto.id %>"
-                          method="post"
+                          method="get"
                     >
                         <button type="submit"
                                 class="btn btn-danger">

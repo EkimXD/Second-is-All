@@ -6,7 +6,7 @@
     <div class="alert alert-danger" role="alert"><%=datos.error%></div>
     <% } %>
 
-    <form action="/producto"
+    <form action="/producto/<%=datos.producto?datos.producto.id:""%>"
           method="POST"
     >
 
@@ -17,6 +17,7 @@
                    name="nombre"
                    placeholder="Ej: libro"
                    title="Ingresar nombre de producto"
+                   value="<%=datos.producto?datos.producto.nombre:""%>"
                    class="form-control">
             <small id="nombreIDHelp"
                    class="form-text text-muted">
@@ -31,6 +32,7 @@
                    name="descripcion"
                    placeholder="Ej: Esta casi nuevo"
                    title="Ingresar descripcion del producto"
+                   value="<%=datos.producto?datos.producto.descripcion:""%>"
                    class="form-control">
             <small id="apellidoIDHelp"
                    class="form-text text-muted">
@@ -45,6 +47,7 @@
                    type="number"
                    name="costo"
                    placeholder="Ej: 16,5"
+                   value="<%=datos.producto!=undefined?datos.producto.costo:""%>"
                    title="Ingresar costo del producto"
                    class="form-control">
             <small id="costoIDHelp"
@@ -55,13 +58,15 @@
 
         <button type="submit"
                 class="btn btn-success">
-            Crear producto
+           <%=datos.producto?"Editar Producto":"Crear producto"%>
         </button>
 
+        <%if(!datos.producto){%>
         <button type="reset"
                 class="btn btn-secondary">
             Limpiar formulario
         </button>
+        <%}%>
 
     </form>
 

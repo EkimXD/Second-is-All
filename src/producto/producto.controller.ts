@@ -79,12 +79,70 @@ export class ProductoController {
         }
     }
 
+    @Get(':id')
+    async editar(
+        @Param('id') id: string,
+        @Query("error")error:string,
+        @Session()session,
+        @Res()res,
+    ) {
+        if (session.usuario !== undefined) {
+            let ban = false;
+            await this._productoService.buscar({id: id, usuario: session.usuario.id_usuario})
+                .then(value => {
+                    if (value.length > 0) {
+                        ban = true;
+                    }
+                });
+            session.usuario.roles.forEach(value => {
+                if (value == 'AD') {
+                    ban = true;
+                }
+            });
+            if (ban) {
+                const producto=await this._productoService.encontrarUno(+id);
+                res.render(
+                    'productos/rutas/crear-producto',
+                    {
+                        datos: {
+                            producto,
+                            error
+                        },
+                    }
+                );
+            } else {
+                res.render(
+                    'categoria/ruta/crear-categoria',
+                    {
+                        datos:{
+                            titulo:'No posee permisos para realizar esta accion',
+                            editable:false,
+                        }
+
+                    }
+                );
+            }
+        } else {
+            res.render(
+                'categoria/ruta/crear-categoria',
+                {
+                    datos:{
+                        titulo:'No existe una sesion activa',
+                        editable:false,
+                    }
+
+                }
+            );
+        }
+    }
+
     @Post(':id')
     async editarProducto(
         @Param('id') id: string,
         @Body() producto: ProductoEntity,
         @Session()session,
-    ): Promise<ProductoEntity> {
+        @Res()res,
+    ) {
         if (session.usuario !== undefined) {
             let ban = false;
             await this._productoService.buscar({id: id, usuario: session.usuario.id_usuario})
@@ -101,23 +159,43 @@ export class ProductoController {
             if (ban) {
                 const validacion = await validate(this.productoDTO(producto));
                 if (validacion.length === 0) {
-                    return this._productoService.actualizarUno(+id, producto);
+                    this._productoService.actualizarUno(+id, producto);
+                    res.redirect("/producto");
                 } else {
-                    throw new BadRequestException('error en validacion');
+                    res.redirect(`/producto/${id}?error=error en validacion`)
                 }
             } else {
-                throw new BadRequestException('No posee permisos para realizar esta accion');
+                res.render(
+                    'categoria/ruta/crear-categoria',
+                    {
+                        datos:{
+                            titulo:'No posee permisos para realizar esta accion',
+                            editable:false,
+                        }
+
+                    }
+                );
             }
         } else {
-            throw new BadRequestException('No existe una sesion activa');
+            res.render(
+                'categoria/ruta/crear-categoria',
+                {
+                    datos:{
+                        titulo:'No existe una sesion activa',
+                        editable:false,
+                    }
+
+                }
+            );
         }
     }
 
-    @Delete(':id')
+    @Get('eliminar/:id')
     async borrarProducto(
         @Param('id') id: string,
         @Session()session,
-    ): Promise<DeleteResult> {
+        @Res()res,
+    ) {
         if (session.usuario !== undefined) {
             let ban = false;
             await this._productoService.buscar({id: id, usuario: session.usuario.id_usuario})
@@ -132,12 +210,32 @@ export class ProductoController {
                 }
             });
             if (ban) {
-                return this._productoService.borrarUno(+id);
+                this._productoService.borrarUno(+id);
+                res.redirect("/producto")
             } else {
-                throw new BadRequestException('No posee permisos para realizar esta accion');
+                res.render(
+                    'categoria/ruta/crear-categoria',
+                    {
+                        datos:{
+                            titulo:'No posee permisos para realizar esta accion',
+                            editable:false,
+                        }
+
+                    }
+                );
             }
         } else {
-            throw new BadRequestException('No existe una sesion activa');
+            console.log("mal");
+            res.render(
+                'categoria/ruta/crear-categoria',
+                {
+                    datos:{
+                        titulo:'No existe una sesion activa',
+                        editable:false,
+                    }
+
+                }
+            );
         }
     }
 
