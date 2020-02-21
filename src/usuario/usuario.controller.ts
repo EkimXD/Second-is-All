@@ -30,6 +30,9 @@ export class UsuarioController {
     ) {
     }
 
+
+
+
     @Get('ruta/mostrar-usuarios')
     async rutaMostrarUsuarios(
       @Query('mensaje') mensaje: string,
@@ -57,6 +60,40 @@ export class UsuarioController {
           },
         },
       );
+    }
+
+    @Get('ruta/mostrar-usuarios-uno/:idUsuario')
+    async rutaUnMostrarUsuarios(
+      @Query('mensaje') mensaje: string,
+      @Query('error') error: string,
+      @Query('consultaUsuario') consultaUsuario: string,
+      @Param('idUsuario') idUsuario: string,
+      @Res() res,
+    ) {
+        const consulta = {
+            id_usuario: idUsuario,
+        };
+
+        try {
+            const arregloUsuarios = await this._usuarioService.buscar(consulta);
+            if (arregloUsuarios.length > 0) {
+                res.render(
+                  'usuario/rutas/crear-usuario',
+                  {
+                      datos: {error, usuario: arregloUsuarios[0]},
+                  },
+                );
+            } else {
+                res.redirect(
+                  '/usuario/ruta/mostrar-usuarios-uno?error=No existe ese usuario',
+                );
+            }
+        } catch (error) {
+            console.log(error);
+            res.redirect(
+              '/usuario/ruta/buscar-mostrar-uno?error=Error editando usuario',
+            );
+        }
     }
 
     @Get('ruta/editar-usuario/:idUsuario')
@@ -112,6 +149,7 @@ export class UsuarioController {
         const result = 'user'
         res.render('componentes/principal',{
             user:{
+                id: null,
                 nombre: result
             }
         })
@@ -185,6 +223,7 @@ export class UsuarioController {
 
                                 res.render('componentes/principal',{
                                     user:{
+                                        id: result.id_usuario,
                                         nombre: result.nick
                                     }
                                 })
@@ -286,6 +325,7 @@ export class UsuarioController {
         @Body()usuario: UsuarioEntity,
         @Param('id')id: string,
         @Session()session,
+        @Res() res,
     ): Promise<UsuarioEntity | void> {
         if (session.usuario !== undefined) {
             let ban = false;
@@ -312,12 +352,17 @@ export class UsuarioController {
                                 value.apellido = usuario.apellido;
                                 value.nombre = usuario.nombre;
                                 return this._usuarioService.actualizarUno(+id, value);
+                                res.redirect(
+                                  '/usuario/rutas/mostrar-usuario-uno?mensaje=El usuario' + value.nick + ' actualizado'
+                                )
                             }
 
                         ).catch(
                             reason => {
                                 throw new BadRequestException(reason);
-                            }
+                                res.redirect('/usuario/rutas/editar-usuario' + id +'?error=Usuario no valido',);
+                            },
+
                         )
                 } else {
                     throw new BadRequestException("Error en validacion");

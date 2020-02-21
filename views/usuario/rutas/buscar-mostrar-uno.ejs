@@ -1,0 +1,30 @@
+<%- include('../../compartido/cabecera')%>
+<div class="container">
+    <form action="/usuario/ruta/mostrar-usuarios-uno"
+          method="GET"
+    >
+        <div class="form-group">
+            <label for="consultaID">Buscar usuario:</label>
+            <input id="consultaID"
+                   type="text"
+                   name="consultaUsuario"
+                   placeholder="Ej: Elvio"
+                   title="Ingresar la busqueda por cedula o nombre"
+                   class="form-control">
+            <small id="cedulaIDHelp"
+                   class="form-text text-muted">
+                Puede buscar por cedula o nombre.
+            </small>
+        </div>
+    </form>
+
+
+    <%- include('../componentes/mostrar-tabla',
+    {
+    usuarios: datos.usuarios
+    }) %>
+
+</div>
+
+
+<%- include('../../compartido/pie-de-pagina')%>

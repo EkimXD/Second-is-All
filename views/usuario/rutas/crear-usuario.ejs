@@ -4,7 +4,7 @@
 <div class="container">
     <h1><%= estaEditando ? 'Editando ' + datos.usuario.nick : 'Crear usuario' %></h1>
 
-    <form action="/usuario"
+    <form action="/usuario<%= estaEditando ? '/' + datos.usuario.id : '' %>"
           method="POST"
     >
         <div class="form-group">
@@ -12,6 +12,7 @@
             <input id="nombreID"
                    type="text"
                    name="nombre"
+                   value="<%= estaEditando ? datos.usuario.nombre : '' %>"
                    placeholder="Ej: Fabricio"
                    title="Ingresar nombre de usuario"
                    class="form-control">
@@ -26,6 +27,7 @@
             <input id="apellidoID"
                    type="text"
                    name="apellido"
+                   value="<%= estaEditando ? datos.usuario.apellido : '' %>"
                    placeholder="Ej: Alvear"
                    title="Ingresar apellido de usuario"
                    class="form-control">
@@ -40,6 +42,7 @@
             <input id="fechaID"
                    type="date"
                    name="fecha_nac"
+                   value="<%= estaEditando ? datos.usuario.fecha_nac : '' %>"
                    placeholder="Ej: dd/mm/aaaa"
                    title="Ingresar fecha de nacimiento"
                    class="form-control"
@@ -55,6 +58,7 @@
             <input id="correoID"
                    type="text"
                    name="correo"
+                   value="<%= estaEditando ? datos.usuario.correo : '' %>"
                    placeholder="Ej: ejemplo@mail.com"
                    title="Ingresar correo valido"
                    class="form-control">
@@ -69,6 +73,7 @@
             <input id="telefonoID"
                    type="text"
                    name="telefono"
+                   value="<%= estaEditando ? datos.usuario.telefono : '' %>"
                    placeholder="Ej: 09xxxxxxxx"
                    title="Ingresar telefono del usuario"
                    class="form-control">
@@ -83,6 +88,7 @@
             <input id="usuarioID"
                    type="text"
                    name="nick"
+                   value="<%= estaEditando ? datos.usuario.nick : '' %>"
                    placeholder="Ej: elvio"
                    title="Ingresar un usuario"
                    class="form-control">
@@ -97,6 +103,7 @@
             <input id="contraseniaID"
                    type="password"
                    name="contrasena"
+                   value="<%= estaEditando ? datos.usuario.contrasena : '' %>"
                    title="Ingresar una contraseña de usuario"
                    class="form-control">
             <small id="contraseniaIDHelp"
