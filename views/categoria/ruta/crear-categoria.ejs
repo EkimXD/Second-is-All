@@ -1,0 +1,49 @@
+<%- include('../../compartido/cabecera.ejs') %>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<div class="container">
+
+    <% if (datos.editable){ %>
+    <h1><%= datos.titulo?datos.titulo.toString():"" %></h1>
+    <% if(datos.error){ %>
+        <div class="alert alert-danger" role="alert"><%=datos.error%></div>
+    <% } %>
+    <form action="/categoria/<%=datos.editar?datos.categoria.id:""%>" method="post">
+        <div class="form-group">
+            <label for="nombreID">Nombre de la Categoria</label>
+            <input id="nombreID"
+                   type="text"
+                   name="nombre"
+                   placeholder="Ej: Consumibles"
+                   value="<%=datos.categoria?datos.categoria.nombre:""%>"
+                   title="Ingresar nombre de la categoria"
+                   class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="descripcionID">Descripcion de la categoria</label>
+            <input id="descripcionID"
+                   type="text"
+                   name="descripcion"
+                   value="<%=datos.categoria?datos.categoria.descripcion:""%>"
+                   placeholder="Ej: Son todos aquellos productos que pueden ser consumidos"
+                   title="Ingresar la descripcion de la categoria"
+                   class="form-control">
+        </div>
+        <button type="submit"
+                class="btn btn-success"
+        >
+            <%=datos.editar==true?"Editar Categoria":"Crear Categoria"%>
+
+        </button>
+        <button type="reset"
+                class="btn btn-secondary"
+        >
+            Limpiar formulario
+        </button>
+    </form>
+    <% }else{ %>
+    <h3 class="alert alert-danger" role="alert"><%= datos.titulo?datos.titulo.toString():"" %></h3>
+    <% } %>
+</div>
+
+<%- include('../../compartido/pie-de-pagina.ejs') %>

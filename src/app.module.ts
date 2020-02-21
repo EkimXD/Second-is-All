@@ -28,8 +28,8 @@ import {DetCarritoModule} from "./det_carrito/det-carrito.module";
                 name: 'default', // Nombre cadena de Conex.
                 type: 'mysql',
                 host: 'localhost',
-                port: 32769,
-                username: 'alv',
+                port: 3306,
+                username: 'root',
                 password: '1234',
                 database: 'secondisall',
                 dropSchema: false,

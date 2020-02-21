@@ -28,6 +28,7 @@ export class RolModule {
   constructor(
     private readonly _rolService:RolService,
   ) {
+      // _rolService.eliminarDatos(); //todo esto hay que eliminar en produccion
     let roles=new RolEntity();
     roles.nombre="VD";
     roles.descripcion="Vendedor";
@@ -41,5 +42,4 @@ export class RolModule {
     roles.descripcion="Administrador";
     _rolService.crearUno(roles);
   }
-
 }
