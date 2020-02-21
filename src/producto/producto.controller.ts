@@ -142,14 +142,22 @@ export class ProductoController {
     }
 
     @Get()
-    listarProductos(
+    async listarProductos(
         @Query("producto") producto: string,
-    ): Promise<ProductoEntity[]> {
+        @Res()res
+    ) {
         let where = {};
         if (producto !== undefined) {
             where = {nombre: Like(`%${producto}%`)}
         }
-        return this._productoService.buscar(where);
+        const productos=await this._productoService.buscar(where);
+        res.render('productos/rutas/buscar-mostrar-producto',{
+            datos:{
+                productos
+            }
+            }
+            )
+
     }
 
     @Get(":id")

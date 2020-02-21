@@ -1,0 +1,46 @@
+<%- include('../../compartido/cabecera') %>
+<div class="container">
+
+    <h1>Productos</h1>
+
+    <a href="/producto/rutas/crear-producto">
+        <button type="button"
+                class="btn btn-primary">
+            Crear producto
+        </button>
+    </a>
+
+    <a href="">
+        <button type="button"
+                class="btn btn-primary">
+            Ver carrito
+        </button>
+    </a>
+
+
+    <form action="/producto"
+          method="GET"
+    >
+        <div class="form-group">
+            <label for="consultaID">Buscar producto:</label>
+            <input id="consultaID"
+                   type="text"
+                   name="producto"
+                   placeholder="Ej: Libro"
+                   title="Ingresar la busqueda por nombre de producto"
+                   class="form-control">
+            <small id="cedulaIDHelp"
+                   class="form-text text-muted">
+                Puede buscar por nombre del producto.
+            </small>
+        </div>
+    </form>
+
+    <%if(datos.productos){%>
+        <%- include('../componentes/mostrar-tabla-productos',{
+        productos:datos.productos
+        })%>
+    <%}%>
+
+</div>
+<%- include('../../compartido/pie-de-pagina') %>

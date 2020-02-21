@@ -144,9 +144,13 @@ export class UsuarioController {
 
     @Get('principal')
     rutaPrincipal(
+        @Session()session,
         @Res() res,
     ) {
-        const result = 'user'
+        let result:string = 'User';
+        if (session.usuario!=undefined){
+            result=session.usuario.usuario;
+        }
         res.render('componentes/principal',{
             user:{
                 id: null,
